@@ -11,14 +11,18 @@ function PlayState:init()
         height = ENTITY_DEFS['player'].height
     }
 
+    self.gravityOn = true
+    self.gravityAmount = GRAVITY_AMOUNT
+
     self.map = Map(self.player)
 
     self.player.stateMachine = StateMachine {
         ['idle'] = function() return PlayerIdleState(self.player) end,
+        ['fall'] = function() return PlayerFallState(self.player, self.gravityAmount) end,
         ['walk'] = function() return PlayerWalkState(self.player) end
     }
 
-    self.player:changeState('idle')
+    self.player:changeState('fall')
 end
 
 function PlayState:update(dt)
