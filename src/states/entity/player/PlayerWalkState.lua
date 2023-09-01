@@ -1,7 +1,8 @@
 PlayerWalkState = Class{__includes = EntityWalkState}
 
-function PlayerWalkState:init(player)
+function PlayerWalkState:init(player, map)
     self.entity = player
+    self.map = map
 
     self.entity.offsetX = 0
     self.entity.offsetY = 5

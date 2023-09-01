@@ -8,6 +8,9 @@ function Map:init(player)
 
     self.renderOffsetX = MAP_RENDER_OFFSET_X
     self.renderOffsetY = MAP_RENDER_OFFSET_Y
+
+    self.gravityOn = true
+    self.gravityAmount = GRAVITY_AMOUNT
 end
 
 function Map:update(dt)

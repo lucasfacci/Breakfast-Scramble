@@ -1,13 +1,17 @@
 EntityFallState = Class{__includes = BaseState}
 
-function EntityFallState:init(entity, gravity)
+function EntityFallState:init(entity, map)
     self.entity = entity
-    self.gravity = gravity
+    self.map = map
 end
 
 function EntityFallState:update(dt)
-    self.entity.dy = self.entity.dy + self.gravity
+    self.entity.dy = self.entity.dy + self.map.gravityAmount
     self.entity.y = self.entity.y + (self.entity.dy * dt)
+
+    if self.entity.y + self.entity.height >= self.map.height then
+        self.entity:changeState('walk')
+    end
 end
 
 function EntityFallState:render()

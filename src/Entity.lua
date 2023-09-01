@@ -1,6 +1,9 @@
 Entity = Class{}
 
 function Entity:init(def)
+    self.type = def.type
+    self.direction = def.direction
+
     self.x = def.x
     self.y = def.y
 
@@ -14,6 +17,8 @@ function Entity:init(def)
     self.offsetY = def.offsetY or 0
     
     self.walkSpeed = def.walkSpeed
+
+    self.health = def.health
     
     self.dead = false
 end
