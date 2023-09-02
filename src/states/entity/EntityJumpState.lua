@@ -1,14 +1,16 @@
-EntityIdleState = Class{__includes = BaseState}
+EntityJumpState = Class{__includes = BaseState}
 
-function EntityIdleState:init(entity)
+function EntityJumpState:init(entity, map)
     self.entity = entity
-    self.entity:changeAnimation('idle')
+    self.map = map
+    self.entity:changeAnimation('jump')
 end
 
-function EntityIdleState:update(dt)
+function EntityJumpState:update(dt)
+    self.entity.currentAnimation:update(dt)
 end
 
-function EntityIdleState:render()
+function EntityJumpState:render()
     local anim = self.entity.currentAnimation
     love.graphics.draw(gTextures[anim.texture], gFrames[anim.texture][anim:getCurrentFrame()],
         math.floor(self.entity.x - self.entity.offsetX), math.floor(self.entity.y - self.entity.offsetY))

@@ -1,13 +1,13 @@
 PlayerIdleState = Class{__includes = EntityIdleState}
 
-function PlayerIdleState:enter(params)
-end
-
 function PlayerIdleState:update(dt)
-    if love.keyboard.isDown('left') or love.keyboard.isDown('right') or
-        love.keyboard.isDown('up') or love.keyboard.isDown('down') or
-        love.keyboard.isDown('a') or love.keyboard.isDown('d') or
-        love.keyboard.isDown('w') or love.keyboard.isDown('s') then
+    if love.keyboard.isDown('a') or love.keyboard.isDown('d') then
         self.entity:changeState('walk')
     end
+
+    if love.keyboard.wasPressed('space') then
+        self.entity:changeState('jump')
+    end
+
+    EntityIdleState.update(self, dt)
 end

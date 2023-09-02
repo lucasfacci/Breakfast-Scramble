@@ -2,7 +2,29 @@ ENTITY_DEFS = {
     ['player'] = {
         type = 'player',
         walkSpeed = PLAYER_WALK_SPEED,
-        width = 5,
-        height = 5
+        jumpVelocity = PLAYER_JUMP_VELOCITY,
+        health = 10,
+        width = 284,
+        height = 487,
+        animations = {
+            ['idle'] = {
+                frames = {1},
+                texture = 'character_walk'
+            },
+            ['walk'] = {
+                frames = {1},
+                texture = 'character_walk'
+            },
+            ['fall'] = {
+                frames = {1},
+                texture = 'character_walk',
+                interval = 1
+            },
+            ['jump'] = {
+                frames = {1},
+                texture = 'character_walk',
+                interval = 1
+            }
+        }
     }
 }
