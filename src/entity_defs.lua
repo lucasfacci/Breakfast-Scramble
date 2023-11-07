@@ -4,8 +4,8 @@ ENTITY_DEFS = {
         walkSpeed = PLAYER_WALK_SPEED,
         jumpVelocity = PLAYER_JUMP_VELOCITY,
         health = 10,
-        width = 284,
-        height = 487,
+        width = 180,
+        height = 190,
         animations = {
             ['idle'] = {
                 frames = {1},
@@ -23,6 +23,11 @@ ENTITY_DEFS = {
             ['jump'] = {
                 frames = {1},
                 texture = 'character_walk',
+                interval = 1
+            },
+            ['sneak'] = {
+                frames = {1},
+                texture = 'character_sneak',
                 interval = 1
             }
         }

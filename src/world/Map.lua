@@ -18,6 +18,10 @@ function Map:update(dt)
 end
 
 function Map:render()
+    love.graphics.setColor(love.math.colorFromBytes(180, 180, 180))
+    love.graphics.rectangle('fill', 0, 0, MAP_WIDTH, MAP_HEIGHT)
+    love.graphics.setColor(love.math.colorFromBytes(255, 255, 255))
+
     if self.player then
         self.player:render()
     end

@@ -21,7 +21,8 @@ function PlayState:init()
         ['fall'] = function() return PlayerFallState(self.player, self.map) end,
         ['idle'] = function() return PlayerIdleState(self.player) end,
         ['jump'] = function() return PlayerJumpState(self.player, self.map) end,
-        ['walk'] = function() return PlayerWalkState(self.player, self.map) end
+        ['walk'] = function() return PlayerWalkState(self.player, self.map) end,
+        ['sneak'] = function() return PlayerSneakState(self.player, self.map) end
     }
 
     self.player:changeState('fall')

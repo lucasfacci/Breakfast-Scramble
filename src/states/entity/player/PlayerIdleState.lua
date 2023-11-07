@@ -5,6 +5,10 @@ function PlayerIdleState:update(dt)
         self.entity:changeState('walk')
     end
 
+    if love.keyboard.isDown('s') then
+        self.entity:changeState('sneak')
+    end
+
     if love.keyboard.wasPressed('space') then
         self.entity:changeState('jump')
     end
