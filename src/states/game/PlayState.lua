@@ -39,5 +39,18 @@ function PlayState:update(dt)
 end
 
 function PlayState:render()
+    love.graphics.push()
     self.map:render()
+    love.graphics.pop()
+
+    love.graphics.setColor(255/255, 0/255, 0/255)
+    -- player's life
+    love.graphics.rectangle('fill', 10, 10, 50, 50)
+    love.graphics.rectangle('fill', 70, 10, 50, 50)
+    love.graphics.rectangle('fill', 130, 10, 50, 50)
+
+    -- enemy's life
+    love.graphics.rectangle('fill', VIRTUAL_WIDTH - 60, 10, 50, 50)
+    love.graphics.rectangle('fill', VIRTUAL_WIDTH - 120, 10, 50, 50)
+    love.graphics.rectangle('fill', VIRTUAL_WIDTH - 180, 10, 50, 50)
 end

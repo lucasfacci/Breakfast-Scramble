@@ -28,15 +28,25 @@ require 'src/states/entity/player/PlayerJumpState'
 require 'src/states/entity/player/PlayerWalkState'
 require 'src/states/entity/player/PlayerSneakState'
 
-require 'src/states/game/StartState'
+require 'src/states/game/CreditsState'
+require 'src/states/game/LevelSelectorState'
+require 'src/states/game/MenuState'
+require 'src/states/game/OptionsState'
 require 'src/states/game/PlayState'
+require 'src/states/game/StoryState'
 
 gTextures = {
-    ['character_walk'] = love.graphics.newImage('graphics/c_stand(maybe_small).png'),
-    ['character_sneak'] = love.graphics.newImage('graphics/c_sneaking(maybe_small).png')
+    ['character_walk'] = love.graphics.newImage('graphics/c_stand(a_little_small).png'),
+    ['character_sneak'] = love.graphics.newImage('graphics/c_sneaking(a_little_small).png')
 }
 
 gFrames = {
     ['character_walk'] = GenerateQuads(gTextures['character_walk'], ENTITY_DEFS['player'].width, ENTITY_DEFS['player'].height),
-    ['character_sneak'] = GenerateQuads(gTextures['character_sneak'], 201, 157)
+    ['character_sneak'] = GenerateQuads(gTextures['character_sneak'], 223, 174)
+}
+
+gFonts = {
+    ['yesevaone-small'] = love.graphics.newFont('fonts/Yeseva_One/YesevaOne-Regular.ttf', 32),
+    ['yesevaone-medium'] = love.graphics.newFont('fonts/Yeseva_One/YesevaOne-Regular.ttf', 64),
+    ['yesevaone-large'] = love.graphics.newFont('fonts/Yeseva_One/YesevaOne-Regular.ttf', 128),
 }
