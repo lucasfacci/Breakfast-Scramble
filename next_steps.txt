@@ -1,3 +1,0 @@
-First level
-    A level where you can walk around and interact with it (objects);
-    This will be a level where in the final you will go to a door to the outside world (that will be a mountain);
