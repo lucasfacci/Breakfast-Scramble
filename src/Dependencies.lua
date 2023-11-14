@@ -4,14 +4,18 @@ push = require 'lib/push'
 Timer = require 'lib/knife.timer'
 
 require 'src/Animation'
+require 'src/Camera'
 require 'src/constants'
-require 'src/Entity'
 require 'src/entity_defs'
+require 'src/Entity'
+require 'src/game_objects'
+require 'src/GameObject'
 require 'src/Player'
 require 'src/StateMachine'
 require 'src/Util'
 
 require 'src/world/Map'
+require 'src/world/StoryMap'
 
 require 'src/states/BaseState'
 require 'src/states/StateStack'
@@ -33,16 +37,18 @@ require 'src/states/game/LevelSelectorState'
 require 'src/states/game/MenuState'
 require 'src/states/game/OptionsState'
 require 'src/states/game/PlayState'
-require 'src/states/game/StoryState'
+require 'src/states/game/PlayStoryState'
 
 gTextures = {
     ['character_walk'] = love.graphics.newImage('graphics/c_stand(a_little_small).png'),
-    ['character_sneak'] = love.graphics.newImage('graphics/c_sneaking(a_little_small).png')
+    ['character_sneak'] = love.graphics.newImage('graphics/c_sneaking(a_little_small).png'),
+    ['door'] = love.graphics.newImage('graphics/door.png')
 }
 
 gFrames = {
     ['character_walk'] = GenerateQuads(gTextures['character_walk'], ENTITY_DEFS['player'].width, ENTITY_DEFS['player'].height),
-    ['character_sneak'] = GenerateQuads(gTextures['character_sneak'], 223, 174)
+    ['character_sneak'] = GenerateQuads(gTextures['character_sneak'], 223, 174),
+    ['door'] = GenerateQuads(gTextures['door'], 250, 400)
 }
 
 gFonts = {
