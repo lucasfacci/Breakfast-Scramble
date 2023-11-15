@@ -12,5 +12,19 @@ GAME_OBJECT_DEFS = {
                 frame = 1
             }
         }
+    },
+    ['box'] = {
+        type = 'box',
+        texture = 'box',
+        frame = 1,
+        width = 250,
+        height = 180,
+        solid = false,
+        defaultState = 'stopped',
+        states = {
+            ['stopped'] = {
+                frame = 1
+            }
+        }
     }
 }

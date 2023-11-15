@@ -42,13 +42,15 @@ require 'src/states/game/PlayStoryState'
 gTextures = {
     ['character_walk'] = love.graphics.newImage('graphics/c_stand(a_little_small).png'),
     ['character_sneak'] = love.graphics.newImage('graphics/c_sneaking(a_little_small).png'),
-    ['door'] = love.graphics.newImage('graphics/door.png')
+    ['door'] = love.graphics.newImage('graphics/door.png'),
+    ['box'] = love.graphics.newImage('graphics/box.png')
 }
 
 gFrames = {
     ['character_walk'] = GenerateQuads(gTextures['character_walk'], ENTITY_DEFS['player'].width, ENTITY_DEFS['player'].height),
     ['character_sneak'] = GenerateQuads(gTextures['character_sneak'], 223, 174),
-    ['door'] = GenerateQuads(gTextures['door'], 250, 400)
+    ['door'] = GenerateQuads(gTextures['door'], GAME_OBJECT_DEFS['door'].width, GAME_OBJECT_DEFS['door'].height),
+    ['box'] = GenerateQuads(gTextures['box'], GAME_OBJECT_DEFS['box'].width, GAME_OBJECT_DEFS['box'].height)
 }
 
 gFonts = {

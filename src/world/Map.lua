@@ -4,6 +4,8 @@ function Map:init(player)
     self.width = MAP_WIDTH
     self.height = MAP_HEIGHT
 
+    self.groundLevel = MAP_HEIGHT - 150
+
     self.player = player
 
     self.renderOffsetX = MAP_RENDER_OFFSET_X
