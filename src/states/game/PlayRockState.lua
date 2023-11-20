@@ -1,6 +1,6 @@
-PlayState = Class{__includes = BaseState}
+PlayRockState = Class{__includes = BaseState}
 
-function PlayState:init()
+function PlayRockState:init()
     self.player = Player {
         type = ENTITY_DEFS['player'].type,
         walkSpeed = ENTITY_DEFS['player'].walkSpeed,
@@ -15,7 +15,9 @@ function PlayState:init()
         height = ENTITY_DEFS['player'].height
     }
 
-    self.map = Map(self.player)
+    self.map = RockMap(self.player)
+
+    self.camera = Camera(self.player)
 
     self.player.stateMachine = StateMachine {
         ['fall'] = function() return PlayerFallState(self.player, self.map) end,
@@ -28,7 +30,7 @@ function PlayState:init()
     self.player:changeState('fall')
 end
 
-function PlayState:update(dt)
+function PlayRockState:update(dt)
     Timer.update(dt)
 
     if love.keyboard.wasPressed('escape') then
@@ -36,9 +38,12 @@ function PlayState:update(dt)
     end
 
     self.map:update(dt)
+    self.camera:update(dt)
 end
 
-function PlayState:render()
+function PlayRockState:render()
+    love.graphics.translate(0, -math.floor(self.camera.y))
+
     love.graphics.push()
     self.map:render()
     love.graphics.pop()
@@ -62,10 +67,4 @@ function PlayState:render()
             love.graphics.draw(gTextures['hearth'], gFrames['hearth'][1], 130, 10)
         end
     end
-
-    love.graphics.setColor(255/255, 255/255, 255/255)
-    -- enemy's life
-    love.graphics.draw(gTextures['hearth'], gFrames['hearth'][1], VIRTUAL_WIDTH - 80, 10)
-    love.graphics.draw(gTextures['hearth'], gFrames['hearth'][1], VIRTUAL_WIDTH - 140, 10)
-    love.graphics.draw(gTextures['hearth'], gFrames['hearth'][1], VIRTUAL_WIDTH - 200, 10)
 end

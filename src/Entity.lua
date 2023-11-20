@@ -21,10 +21,15 @@ function Entity:init(def)
     self.walkSpeed = def.walkSpeed
 
     self.jumpVelocity = def.jumpVelocity
+    
+    self.waitTimer = 0
+    self.immunityDuration = 0
 
     self.health = def.health
     
     self.dead = false
+
+    self.opacity = 1
 end
 
 function Entity:createAnimations(animations)
@@ -55,10 +60,33 @@ function Entity:update(dt)
     if self.currentAnimation then
         self.currentAnimation:update(dt)
     end
+
+    if self.waitTimer > self.immunityDuration then
+        self.opacity = 1
+        self.immunityDuration = 0
+    end
+
+    self.waitTimer = self.waitTimer + dt
+end
+
+function Entity:heal(healing)
+    if self.health < 10 then
+        self.health = self.health + healing
+    end
+end
+
+function Entity:damage(dmg)
+    if self.immunityDuration == 0 then
+        self.health = self.health - dmg
+        self.immunityDuration = 2
+        self.waitTimer = 0
+        self.opacity = 0.5
+    end
 end
 
 function Entity:render(adjacentOffsetX, adjacentOffsetY)
     self.x, self.y = self.x + (adjacentOffsetX or 0), self.y + (adjacentOffsetY or 0)
+    love.graphics.setColor(1, 1, 1, self.opacity)
     self.stateMachine:render()
     love.graphics.setColor(1, 1, 1, 1)
     self.x, self.y = self.x - (adjacentOffsetX or 0), self.y - (adjacentOffsetY or 0)

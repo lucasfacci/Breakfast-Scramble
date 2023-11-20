@@ -5,7 +5,11 @@ function StateStack:init()
 end
 
 function StateStack:update(dt)
-    self.states[#self.states]:update(dt)
+    -- self.states[#self.states]:update(dt)
+
+    for k, state in ipairs(self.states) do
+        state:update(dt)
+    end
 end
 
 function StateStack:processAI(params, dt)
@@ -13,7 +17,7 @@ function StateStack:processAI(params, dt)
 end
 
 function StateStack:render()
-    for i, state in ipairs(self.states) do
+    for k, state in ipairs(self.states) do
         state:render()
     end
 end

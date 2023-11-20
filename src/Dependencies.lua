@@ -10,11 +10,13 @@ require 'src/entity_defs'
 require 'src/Entity'
 require 'src/game_objects'
 require 'src/GameObject'
+require 'src/Hitbox'
 require 'src/Player'
 require 'src/StateMachine'
 require 'src/Util'
 
 require 'src/world/Map'
+require 'src/world/RockMap'
 require 'src/world/StoryMap'
 
 require 'src/states/BaseState'
@@ -33,22 +35,33 @@ require 'src/states/entity/player/PlayerWalkState'
 require 'src/states/entity/player/PlayerSneakState'
 
 require 'src/states/game/CreditsState'
+require 'src/states/game/FadeInState'
+require 'src/states/game/FadeOutState'
+require 'src/states/game/GameOverState'
 require 'src/states/game/LevelSelectorState'
 require 'src/states/game/MenuState'
 require 'src/states/game/OptionsState'
+require 'src/states/game/PlayRockState'
 require 'src/states/game/PlayState'
 require 'src/states/game/PlayStoryState'
 
 gTextures = {
-    ['character_walk'] = love.graphics.newImage('graphics/c_stand(a_little_small).png'),
+    ['character_idle'] = love.graphics.newImage('graphics/c_stand(a_little_small).png'),
+    ['character_walk'] = love.graphics.newImage('graphics/running_frs.png'),
     ['character_sneak'] = love.graphics.newImage('graphics/c_sneaking(a_little_small).png'),
+    ['hearth'] = love.graphics.newImage('graphics/hearth.png'),
+    ['rock'] = love.graphics.newImage('graphics/rock.png'),
+    ['rock_platform'] = love.graphics.newImage('graphics/rock_platform.png'),
     ['door'] = love.graphics.newImage('graphics/door.png'),
     ['box'] = love.graphics.newImage('graphics/box.png')
 }
 
 gFrames = {
-    ['character_walk'] = GenerateQuads(gTextures['character_walk'], ENTITY_DEFS['player'].width, ENTITY_DEFS['player'].height),
+    ['character_idle'] = GenerateQuads(gTextures['character_idle'], ENTITY_DEFS['player'].width, ENTITY_DEFS['player'].height),
     ['character_sneak'] = GenerateQuads(gTextures['character_sneak'], 223, 174),
+    ['hearth'] = GenerateQuads(gTextures['hearth'], 70, 70),
+    ['rock'] = GenerateQuads(gTextures['rock'], GAME_OBJECT_DEFS['rock'].width, GAME_OBJECT_DEFS['rock'].height),
+    ['rock_platform'] = GenerateQuads(gTextures['rock_platform'], GAME_OBJECT_DEFS['rock_platform'].width, GAME_OBJECT_DEFS['rock_platform'].height),
     ['door'] = GenerateQuads(gTextures['door'], GAME_OBJECT_DEFS['door'].width, GAME_OBJECT_DEFS['door'].height),
     ['box'] = GenerateQuads(gTextures['box'], GAME_OBJECT_DEFS['box'].width, GAME_OBJECT_DEFS['box'].height)
 }

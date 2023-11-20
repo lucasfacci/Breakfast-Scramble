@@ -24,7 +24,7 @@ function StoryMap:generateGameObjects()
     door.onCollide = function()
         if love.keyboard.wasPressed('e') then
             gStateStack:pop()
-            gStateStack:push(PlayState())
+            gStateStack:push(PlayRockState())
         end
     end
 

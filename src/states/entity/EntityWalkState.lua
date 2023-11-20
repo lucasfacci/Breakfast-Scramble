@@ -9,11 +9,8 @@ end
 function EntityWalkState:update(dt)
     self.entity.currentAnimation:update(dt)
 
-    self.bumped = false
-
     if self.entity.y >= self.map.height - self.entity.height then
         self.entity.y = self.map.height - self.entity.height
-        self.bumped = true
     end
 
     if love.keyboard.wasPressed('space') then
@@ -26,8 +23,8 @@ function EntityWalkState:render()
     love.graphics.draw(gTextures[anim.texture], gFrames[anim.texture][anim:getCurrentFrame()],
         math.floor(self.entity.x - self.entity.offsetX), math.floor(self.entity.y - self.entity.offsetY))
 
-    -- -- DEBUG
-    -- love.graphics.setColor(255, 0, 255, 255)
-    -- love.graphics.rectangle('line', self.entity.x, self.entity.y, self.entity.width, self.entity.height)
-    -- love.graphics.setColor(255, 255, 255, 255)
+    -- DEBUG
+    love.graphics.setColor(255, 0, 255, 255)
+    love.graphics.rectangle('line', self.entity.x, self.entity.y, self.entity.width, self.entity.height)
+    love.graphics.setColor(255, 255, 255, 255)
 end
