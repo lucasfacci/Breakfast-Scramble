@@ -3,7 +3,7 @@ EntityJumpState = Class{__includes = BaseState}
 function EntityJumpState:init(entity, map)
     self.entity = entity
     self.map = map
-    self.entity:changeAnimation('jump')
+    self.entity:changeAnimation('jump-' .. self.entity.direction)
 end
 
 function EntityJumpState:update(dt)

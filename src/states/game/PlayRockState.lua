@@ -3,6 +3,7 @@ PlayRockState = Class{__includes = BaseState}
 function PlayRockState:init()
     self.player = Player {
         type = ENTITY_DEFS['player'].type,
+        direction = 'front',
         walkSpeed = ENTITY_DEFS['player'].walkSpeed,
         jumpVelocity = ENTITY_DEFS['player'].jumpVelocity,
         animations = ENTITY_DEFS['player'].animations,

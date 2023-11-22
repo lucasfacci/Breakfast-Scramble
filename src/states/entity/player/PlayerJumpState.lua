@@ -5,13 +5,14 @@ function PlayerJumpState:enter(params)
 end
 
 function PlayerJumpState:update(dt)
-    
     if love.keyboard.isDown('a') then
         self.entity.direction = 'left'
+        self.entity:changeAnimation('jump-left')
         
         self.entity.x = self.entity.x - self.entity.walkSpeed * dt
     elseif love.keyboard.isDown('d') then
         self.entity.direction = 'right'
+        self.entity:changeAnimation('jump-right')
 
         self.entity.x = self.entity.x + self.entity.walkSpeed * dt
     end

@@ -3,30 +3,11 @@ EntityFallState = Class{__includes = BaseState}
 function EntityFallState:init(entity, map)
     self.entity = entity
     self.map = map
-    self.entity:changeAnimation('fall')
+    self.entity:changeAnimation('fall-' .. self.entity.direction)
 end
 
 function EntityFallState:update(dt)
     self.entity.currentAnimation:update(dt)
-
-    if love.keyboard.isDown('a') then
-        self.entity.direction = 'left'
-        
-        self.entity.x = self.entity.x - self.entity.walkSpeed * dt
-    elseif love.keyboard.isDown('d') then
-        self.entity.direction = 'right'
-
-        self.entity.x = self.entity.x + self.entity.walkSpeed * dt
-    end
-    
-    self.entity.dy = self.entity.dy + self.map.gravityAmount
-    self.entity.y = self.entity.y + (self.entity.dy * dt)
-
-    if self.entity.y >= self.map.groundLevel - self.entity.height then
-        self.entity.y = self.map.groundLevel - self.entity.height
-        self.entity.dy = 0
-        self.entity:changeState('idle')
-    end
 end
 
 function EntityFallState:render()

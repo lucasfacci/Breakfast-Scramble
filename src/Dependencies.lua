@@ -47,7 +47,7 @@ require 'src/states/game/PlayStoryState'
 
 gTextures = {
     ['character_idle'] = love.graphics.newImage('graphics/c_stand(a_little_small).png'),
-    ['character_walk'] = love.graphics.newImage('graphics/running_frs.png'),
+    ['character_walk'] = love.graphics.newImage('graphics/c_running_frs2_fixed.png'),
     ['character_sneak'] = love.graphics.newImage('graphics/c_sneaking(a_little_small).png'),
     ['hearth'] = love.graphics.newImage('graphics/hearth.png'),
     ['rock'] = love.graphics.newImage('graphics/rock.png'),
@@ -58,6 +58,7 @@ gTextures = {
 
 gFrames = {
     ['character_idle'] = GenerateQuads(gTextures['character_idle'], ENTITY_DEFS['player'].width, ENTITY_DEFS['player'].height),
+    ['character_walk'] = GenerateQuads(gTextures['character_walk'], 157, 211),
     ['character_sneak'] = GenerateQuads(gTextures['character_sneak'], 223, 174),
     ['hearth'] = GenerateQuads(gTextures['hearth'], 70, 70),
     ['rock'] = GenerateQuads(gTextures['rock'], GAME_OBJECT_DEFS['rock'].width, GAME_OBJECT_DEFS['rock'].height),

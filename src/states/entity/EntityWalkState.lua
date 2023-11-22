@@ -3,7 +3,7 @@ EntityWalkState = Class{__includes = BaseState}
 function EntityWalkState:init(entity, map)
     self.entity = entity
     self.map = map
-    self.entity:changeAnimation('walk')
+    self.entity:changeAnimation('walk-' .. self.entity.direction)
 end
 
 function EntityWalkState:update(dt)
