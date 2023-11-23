@@ -5,7 +5,7 @@ function RockMap:init(player)
     self.height = MAP_HEIGHT
 
     self.topLevel = -10000
-    self.groundLevel = MAP_HEIGHT
+    self.groundLevel = MAP_HEIGHT - 30
 
     self.player = player
 
@@ -20,13 +20,12 @@ function RockMap:init(player)
 
     self:generatePlatforms()
 
-    -- used for AI control
     self.rockWaitDuration = 0
     self.rockWaitTimer = 0
 end
 
 function RockMap:generatePlatforms()
-    for y = -10000, self.groundLevel do
+    for y = -10000, self.groundLevel - 100 do
         if y % 200 == 0 then
             local platform = GameObject(GAME_OBJECT_DEFS['rock_platform'], math.random(self.width - GAME_OBJECT_DEFS['rock_platform'].width), y)
         

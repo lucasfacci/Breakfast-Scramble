@@ -4,7 +4,7 @@ function StoryMap:init(player)
     self.width = MAP_WIDTH
     self.height = MAP_HEIGHT
 
-    self.groundLevel = MAP_HEIGHT - 150
+    self.groundLevel = MAP_HEIGHT - 30
 
     self.player = player
 
@@ -19,7 +19,7 @@ function StoryMap:init(player)
 end
 
 function StoryMap:generateGameObjects()
-    local door = GameObject(GAME_OBJECT_DEFS['door'], VIRTUAL_WIDTH - 260, self.groundLevel - 400)
+    local door = GameObject(GAME_OBJECT_DEFS['door'], VIRTUAL_WIDTH - 260, self.groundLevel - GAME_OBJECT_DEFS['door'].height - 10)
 
     door.onCollide = function()
         if love.keyboard.wasPressed('e') then
@@ -30,15 +30,15 @@ function StoryMap:generateGameObjects()
 
     table.insert(self.objects, door)
 
-    local box = GameObject(GAME_OBJECT_DEFS['box'], VIRTUAL_WIDTH / 2, self.groundLevel - GAME_OBJECT_DEFS['box'].height + 90)
+    local bed = GameObject(GAME_OBJECT_DEFS['bed'], 350, self.groundLevel - GAME_OBJECT_DEFS['bed'].height)
 
-    box.onCollide = function()
+    bed.onCollide = function()
         if love.keyboard.wasPressed('e') then
-            print('box trigger')
+            print('bed trigger')
         end
     end
 
-    table.insert(self.objects, box)
+    table.insert(self.objects, bed)
 end
 
 function StoryMap:update(dt)
@@ -50,11 +50,18 @@ function StoryMap:update(dt)
             object:onCollide()
         end
     end
+    
+    if self.player.x <= 0 then
+        self.player.x = 0
+    end
+
+    if self.player.x >= self.width - self.player.width then
+        self.player.x = self.width - self.player.width
+    end
 end
 
 function StoryMap:render()
-    love.graphics.setColor(180/255, 180/255, 180/255)
-    love.graphics.rectangle('fill', 0, 0, MAP_WIDTH, MAP_HEIGHT)
+    love.graphics.draw(gTextures['story_background'], gFrames['story_background'][1], 0, 0)
 
     -- for k, object in pairs(self.objects) do
     --     object:render()
@@ -62,7 +69,6 @@ function StoryMap:render()
 
     self.objects[1]:render()
 
-    love.graphics.setColor(255/255, 255/255, 255/255)
     if self.player then
         self.player:render()
     end

@@ -10,7 +10,7 @@ function PlayRockState:init()
         health = ENTITY_DEFS['player'].health,
 
         x = VIRTUAL_WIDTH / 2 - ENTITY_DEFS['player'].width / 2,
-        y = VIRTUAL_HEIGHT / 2 - ENTITY_DEFS['player'].height / 2,
+        y = MAP_HEIGHT - 30 - ENTITY_DEFS['player'].height,
 
         width = ENTITY_DEFS['player'].width,
         height = ENTITY_DEFS['player'].height
@@ -29,6 +29,9 @@ function PlayRockState:init()
     }
 
     self.player:changeState('fall')
+
+    self.waitDuration = 0
+    self.waitTimer = 0
 end
 
 function PlayRockState:update(dt)
@@ -43,7 +46,9 @@ function PlayRockState:update(dt)
 end
 
 function PlayRockState:render()
-    love.graphics.translate(0, -math.floor(self.camera.y))
+    if self.player.y + self.player.height / 2 <= self.map.height / 2 then   
+        love.graphics.translate(0, -math.floor(self.camera.y))
+    end
 
     love.graphics.push()
     self.map:render()

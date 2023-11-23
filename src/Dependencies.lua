@@ -46,25 +46,27 @@ require 'src/states/game/PlayState'
 require 'src/states/game/PlayStoryState'
 
 gTextures = {
-    ['character_idle'] = love.graphics.newImage('graphics/c_stand(a_little_small).png'),
+    ['character_idle'] = love.graphics.newImage('graphics/c_stand.png'),
     ['character_walk'] = love.graphics.newImage('graphics/c_running_frs2_fixed.png'),
-    ['character_sneak'] = love.graphics.newImage('graphics/c_sneaking(a_little_small).png'),
+    ['character_sneak'] = love.graphics.newImage('graphics/c_sneaking.png'),
+    ['story_background'] = love.graphics.newImage('graphics/story_background.png'),
     ['hearth'] = love.graphics.newImage('graphics/hearth.png'),
     ['rock'] = love.graphics.newImage('graphics/rock.png'),
     ['rock_platform'] = love.graphics.newImage('graphics/rock_platform.png'),
     ['door'] = love.graphics.newImage('graphics/door.png'),
-    ['box'] = love.graphics.newImage('graphics/box.png')
+    ['bed'] = love.graphics.newImage('graphics/bed.png')
 }
 
 gFrames = {
     ['character_idle'] = GenerateQuads(gTextures['character_idle'], ENTITY_DEFS['player'].width, ENTITY_DEFS['player'].height),
     ['character_walk'] = GenerateQuads(gTextures['character_walk'], 157, 211),
     ['character_sneak'] = GenerateQuads(gTextures['character_sneak'], 223, 174),
+    ['story_background'] = GenerateQuads(gTextures['story_background'], 1920, 1080),
     ['hearth'] = GenerateQuads(gTextures['hearth'], 70, 70),
     ['rock'] = GenerateQuads(gTextures['rock'], GAME_OBJECT_DEFS['rock'].width, GAME_OBJECT_DEFS['rock'].height),
     ['rock_platform'] = GenerateQuads(gTextures['rock_platform'], GAME_OBJECT_DEFS['rock_platform'].width, GAME_OBJECT_DEFS['rock_platform'].height),
     ['door'] = GenerateQuads(gTextures['door'], GAME_OBJECT_DEFS['door'].width, GAME_OBJECT_DEFS['door'].height),
-    ['box'] = GenerateQuads(gTextures['box'], GAME_OBJECT_DEFS['box'].width, GAME_OBJECT_DEFS['box'].height)
+    ['bed'] = GenerateQuads(gTextures['bed'], GAME_OBJECT_DEFS['bed'].width, GAME_OBJECT_DEFS['bed'].height)
 }
 
 gFonts = {

@@ -10,15 +10,13 @@ function PlayStoryState:init()
         health = ENTITY_DEFS['player'].health,
 
         x = VIRTUAL_WIDTH / 2 - ENTITY_DEFS['player'].width / 2,
-        y = VIRTUAL_HEIGHT / 2 - ENTITY_DEFS['player'].height / 2,
+        y = MAP_HEIGHT - 30 - ENTITY_DEFS['player'].height,
 
         width = ENTITY_DEFS['player'].width,
         height = ENTITY_DEFS['player'].height
     }
 
     self.map = StoryMap(self.player)
-
-    self.camera = Camera(self.player)
 
     self.player.stateMachine = StateMachine {
         ['fall'] = function() return PlayerFallState(self.player, self.map) end,
@@ -39,12 +37,9 @@ function PlayStoryState:update(dt)
     end
 
     self.map:update(dt)
-    self.camera:update(dt)
 end
 
 function PlayStoryState:render()
-    love.graphics.translate(-math.floor(self.camera.x), 0)
-
     love.graphics.push()
     self.map:render()
     love.graphics.pop()

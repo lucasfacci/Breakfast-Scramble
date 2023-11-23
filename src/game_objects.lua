@@ -41,12 +41,12 @@ GAME_OBJECT_DEFS = {
             }
         }
     },
-    ['box'] = {
-        type = 'box',
-        texture = 'box',
+    ['bed'] = {
+        type = 'bed',
+        texture = 'bed',
         frame = 1,
-        width = 250,
-        height = 180,
+        width = 700,
+        height = 336,
         solid = false,
         defaultState = 'stopped',
         states = {
