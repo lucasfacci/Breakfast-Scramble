@@ -12,7 +12,7 @@ function PlayState:init()
         health = ENTITY_DEFS['player'].health,
 
         x = self.map.width / 2 - ENTITY_DEFS['player'].width / 2,
-        y = self.map.height - 30 - ENTITY_DEFS['player'].height / 2,
+        y = self.map.groundLevel - ENTITY_DEFS['player'].height / 2,
 
         width = ENTITY_DEFS['player'].width,
         height = ENTITY_DEFS['player'].height,
