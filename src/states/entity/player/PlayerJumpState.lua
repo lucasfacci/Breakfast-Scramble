@@ -10,11 +10,15 @@ function PlayerJumpState:update(dt)
         self.entity:changeAnimation('jump-left')
         
         self.entity.x = self.entity.x - self.entity.walkSpeed * dt
+
+        self.entity:checkLeftCollisions(dt)
     elseif love.keyboard.isDown('d') then
         self.entity.direction = 'right'
         self.entity:changeAnimation('jump-right')
 
         self.entity.x = self.entity.x + self.entity.walkSpeed * dt
+
+        self.entity:checkRightCollisions(dt)
     end
     
     if self.entity.dy >= 0 then
@@ -23,6 +27,17 @@ function PlayerJumpState:update(dt)
     
     self.entity.dy = self.entity.dy + self.map.gravityAmount
     self.entity.y = self.entity.y + (self.entity.dy * dt)
+
+    -- check if we've collided with any collidable game objects
+    for k, object in pairs(self.map.objects) do
+        if object:collides(self.entity) then
+            if object.solid then
+                self.entity.y = object.y + object.height
+                self.entity.dy = 0
+                self.entity:changeState('fall')
+            end
+        end
+    end
 
     EntityJumpState.update(self, dt)
 end

@@ -9,10 +9,6 @@ end
 function EntityWalkState:update(dt)
     self.entity.currentAnimation:update(dt)
 
-    if self.entity.y >= self.map.height - self.entity.height then
-        self.entity.y = self.map.height - self.entity.height
-    end
-
     if love.keyboard.wasPressed('space') then
         self.entity:changeState('jump')
     end

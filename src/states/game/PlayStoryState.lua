@@ -1,6 +1,8 @@
 PlayStoryState = Class{__includes = BaseState}
 
 function PlayStoryState:init()
+    self.map = StoryMap()
+
     self.player = Player {
         type = ENTITY_DEFS['player'].type,
         direction = 'front',
@@ -9,14 +11,14 @@ function PlayStoryState:init()
         animations = ENTITY_DEFS['player'].animations,
         health = ENTITY_DEFS['player'].health,
 
-        x = VIRTUAL_WIDTH / 2 - ENTITY_DEFS['player'].width / 2,
-        y = MAP_HEIGHT - 30 - ENTITY_DEFS['player'].height,
+        x = self.map.width / 2 - ENTITY_DEFS['player'].width / 2,
+        y = self.map.height - 30 - ENTITY_DEFS['player'].height,
 
         width = ENTITY_DEFS['player'].width,
-        height = ENTITY_DEFS['player'].height
-    }
+        height = ENTITY_DEFS['player'].height,
 
-    self.map = StoryMap(self.player)
+        map = self.map
+    }
 
     self.player.stateMachine = StateMachine {
         ['fall'] = function() return PlayerFallState(self.player, self.map) end,
@@ -36,11 +38,29 @@ function PlayStoryState:update(dt)
         love.event.quit()
     end
 
+    self.player:update(dt)
     self.map:update(dt)
+
+    for k, object in pairs(self.map.objects) do
+        -- trigger collision callback on object
+        if self.player:collides(object) then
+            object:onCollide()
+        end
+    end
+    
+    if self.player.x <= 0 then
+        self.player.x = 0
+    end
+
+    if self.player.x >= self.map.width - self.player.width then
+        self.player.x = self.map.width - self.player.width
+    end
 end
 
 function PlayStoryState:render()
     love.graphics.push()
     self.map:render()
+    self.player:render()
+    self.map.objects[2]:render()
     love.graphics.pop()
 end

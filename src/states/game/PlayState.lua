@@ -1,6 +1,8 @@
 PlayState = Class{__includes = BaseState}
 
 function PlayState:init()
+    self.map = Map()
+
     self.player = Player {
         type = ENTITY_DEFS['player'].type,
         direction = 'front',
@@ -9,14 +11,14 @@ function PlayState:init()
         animations = ENTITY_DEFS['player'].animations,
         health = ENTITY_DEFS['player'].health,
 
-        x = VIRTUAL_WIDTH / 2 - ENTITY_DEFS['player'].width / 2,
-        y = VIRTUAL_HEIGHT / 2 - ENTITY_DEFS['player'].height / 2,
+        x = self.map.width / 2 - ENTITY_DEFS['player'].width / 2,
+        y = self.map.height - 30 - ENTITY_DEFS['player'].height / 2,
 
         width = ENTITY_DEFS['player'].width,
-        height = ENTITY_DEFS['player'].height
-    }
+        height = ENTITY_DEFS['player'].height,
 
-    self.map = Map(self.player)
+        map = self.map
+    }
 
     self.player.stateMachine = StateMachine {
         ['fall'] = function() return PlayerFallState(self.player, self.map) end,

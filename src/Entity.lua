@@ -30,6 +30,8 @@ function Entity:init(def)
     self.dead = false
 
     self.opacity = 1
+
+    self.map = def.map
 end
 
 function Entity:createAnimations(animations)
@@ -82,6 +84,11 @@ function Entity:damage(dmg)
         self.waitTimer = 0
         self.opacity = 0.5
     end
+end
+
+function Entity:collides(entity)
+    return not (self.x > entity.x + entity.width or entity.x > self.x + self.width or
+        self.y > entity.y + entity.height or entity.y > self.y + self.height)
 end
 
 function Entity:render(adjacentOffsetX, adjacentOffsetY)

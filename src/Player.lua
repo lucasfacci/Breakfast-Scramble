@@ -8,11 +8,42 @@ function Player:update(dt)
     Entity.update(self, dt)
 end
 
-function Player:collides(target)
-    local selfY, selfHeight = self.y + self.height / 2, self.height - self.height / 2
-    
-    return not (self.x + self.width < target.x or self.x > target.x + target.width or
-                selfY + selfHeight < target.y or selfY > target.y + target.height)
+function Player:checkLeftCollisions(dt) 
+    -- allow us to walk atop solid objects even if we collide with them
+    self.y = self.y - 1
+    local collidedObjects = self:checkObjectCollisions()
+    self.y = self.y + 1
+
+    -- reset X if new collided object
+    if #collidedObjects > 0 then
+        self.x = self.x + self.walkSpeed * dt
+    end
+end
+
+function Player:checkRightCollisions(dt)        
+    -- allow us to walk atop solid objects even if we collide with them
+    self.y = self.y - 1
+    local collidedObjects = self:checkObjectCollisions()
+    self.y = self.y + 1
+
+    -- reset X if new collided object
+    if #collidedObjects > 0 then
+        self.x = self.x - self.walkSpeed * dt
+    end
+end
+
+function Player:checkObjectCollisions()
+    local collidedObjects = {}
+
+    for k, object in pairs(self.map.objects) do
+        if object:collides(self) then
+            if object.solid then
+                table.insert(collidedObjects, object)
+            end
+        end
+    end
+
+    return collidedObjects
 end
 
 function Player:render()

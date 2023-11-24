@@ -1,6 +1,8 @@
 PlayRockState = Class{__includes = BaseState}
 
 function PlayRockState:init()
+    self.map = RockMap()
+
     self.player = Player {
         type = ENTITY_DEFS['player'].type,
         direction = 'front',
@@ -9,14 +11,14 @@ function PlayRockState:init()
         animations = ENTITY_DEFS['player'].animations,
         health = ENTITY_DEFS['player'].health,
 
-        x = VIRTUAL_WIDTH / 2 - ENTITY_DEFS['player'].width / 2,
-        y = MAP_HEIGHT - 30 - ENTITY_DEFS['player'].height,
+        x = self.map.width / 2 - ENTITY_DEFS['player'].width / 2,
+        y = self.map.groundLevel - ENTITY_DEFS['player'].height,
 
         width = ENTITY_DEFS['player'].width,
-        height = ENTITY_DEFS['player'].height
-    }
+        height = ENTITY_DEFS['player'].height,
 
-    self.map = RockMap(self.player)
+        map = self.map
+    }
 
     self.camera = Camera(self.player)
 
@@ -30,8 +32,38 @@ function PlayRockState:init()
 
     self.player:changeState('fall')
 
-    self.waitDuration = 0
-    self.waitTimer = 0
+    self.rockWaitDuration = 0
+    self.rockWaitTimer = 0
+end
+
+function PlayRockState:generateRock()
+    local rock = GameObject(GAME_OBJECT_DEFS['rock'], math.random(self.map.width - GAME_OBJECT_DEFS['rock'].width), self.player.y - MAP_HEIGHT)
+
+    rock.onCollide = function()
+        self.player:damage(1)
+
+        if self.player.health <= 0 then
+            gStateStack:pop()
+            gStateStack:push(GameOverState())
+        end
+    end
+
+    table.insert(self.map.objects, rock)
+end
+
+function PlayRockState:randomizeRockFallTime(dt)
+    if self.rockWaitDuration == 0 then
+        
+        -- set an initial move duration and direction
+        self.rockWaitDuration = 1
+    elseif self.rockWaitTimer > self.rockWaitDuration then
+        self.rockWaitTimer = 0
+
+        self:generateRock()
+        self.rockWaitDuration = math.random(5)
+    end
+
+    self.rockWaitTimer = self.rockWaitTimer + dt
 end
 
 function PlayRockState:update(dt)
@@ -41,36 +73,75 @@ function PlayRockState:update(dt)
         love.event.quit()
     end
 
+    self.player:update(dt)
     self.map:update(dt)
     self.camera:update(dt)
+    self:randomizeRockFallTime(dt)
+
+    for k, object in pairs(self.map.objects) do
+        object:update(dt)
+        -- trigger collision callback on object
+        if self.player:collides(object) then
+            object:onCollide()
+        end
+
+        if object.type == 'rock' then
+            if object.y < self.map.groundLevel then
+                object.y = object.y + 800 * dt
+            else
+                table.remove(self.map.objects, k)
+            end
+        end
+    end
 end
 
 function PlayRockState:render()
-    if self.player.y + self.player.height / 2 <= self.map.height / 2 then   
+    if self.player.y + self.player.height / 2 <= self.map.height / 2 then
         love.graphics.translate(0, -math.floor(self.camera.y))
     end
 
     love.graphics.push()
     self.map:render()
+    self.player:render()
     love.graphics.pop()
 
-    love.graphics.setColor(255/255, 255/255, 255/255)
-    -- player's life
-    if not self.player.dead and self.player.health >= 1 then
-        if self.player.health == 3 then
-            love.graphics.draw(gTextures['hearth'], gFrames['hearth'][1], 10, 10)
-            love.graphics.draw(gTextures['hearth'], gFrames['hearth'][1], 70, 10)
-            love.graphics.draw(gTextures['hearth'], gFrames['hearth'][1], 130, 10)
-        elseif self.player.health == 2 then
-            love.graphics.draw(gTextures['hearth'], gFrames['hearth'][1], 10, 10)
-            love.graphics.draw(gTextures['hearth'], gFrames['hearth'][1], 70, 10)
-            love.graphics.setColor(255/255, 255/255, 255/255, 0.3)
-            love.graphics.draw(gTextures['hearth'], gFrames['hearth'][1], 130, 10)
-        elseif self.player.health == 1 then
-            love.graphics.draw(gTextures['hearth'], gFrames['hearth'][1], 10, 10)
-            love.graphics.setColor(255/255, 255/255, 255/255, 0.3)
-            love.graphics.draw(gTextures['hearth'], gFrames['hearth'][1], 70, 10)
-            love.graphics.draw(gTextures['hearth'], gFrames['hearth'][1], 130, 10)
+    if self.player.y + self.player.height / 2 <= self.map.height / 2 then
+        -- player's life
+        if not self.player.dead and self.player.health >= 1 then
+            if self.player.health == 3 then
+                love.graphics.draw(gTextures['hearth'], gFrames['hearth'][1], 10, self.camera.y + 10)
+                love.graphics.draw(gTextures['hearth'], gFrames['hearth'][1], 70, self.camera.y + 10)
+                love.graphics.draw(gTextures['hearth'], gFrames['hearth'][1], 130, self.camera.y + 10)
+            elseif self.player.health == 2 then
+                love.graphics.draw(gTextures['hearth'], gFrames['hearth'][1], 10, self.camera.y + 10)
+                love.graphics.draw(gTextures['hearth'], gFrames['hearth'][1], 70, self.camera.y + 10)
+                love.graphics.setColor(255/255, 255/255, 255/255, 0.3)
+                love.graphics.draw(gTextures['hearth'], gFrames['hearth'][1], 130, self.camera.y + 10)
+            elseif self.player.health == 1 then
+                love.graphics.draw(gTextures['hearth'], gFrames['hearth'][1], 10, self.camera.y + 10)
+                love.graphics.setColor(255/255, 255/255, 255/255, 0.3)
+                love.graphics.draw(gTextures['hearth'], gFrames['hearth'][1], 70, self.camera.y + 10)
+                love.graphics.draw(gTextures['hearth'], gFrames['hearth'][1], 130, self.camera.y + 10)
+            end
+        end
+    else
+        -- player's life
+        if not self.player.dead and self.player.health >= 1 then
+            if self.player.health == 3 then
+                love.graphics.draw(gTextures['hearth'], gFrames['hearth'][1], 10, 10)
+                love.graphics.draw(gTextures['hearth'], gFrames['hearth'][1], 70, 10)
+                love.graphics.draw(gTextures['hearth'], gFrames['hearth'][1], 130, 10)
+            elseif self.player.health == 2 then
+                love.graphics.draw(gTextures['hearth'], gFrames['hearth'][1], 10, 10)
+                love.graphics.draw(gTextures['hearth'], gFrames['hearth'][1], 70, 10)
+                love.graphics.setColor(255/255, 255/255, 255/255, 0.3)
+                love.graphics.draw(gTextures['hearth'], gFrames['hearth'][1], 130, 10)
+            elseif self.player.health == 1 then
+                love.graphics.draw(gTextures['hearth'], gFrames['hearth'][1], 10, 10)
+                love.graphics.setColor(255/255, 255/255, 255/255, 0.3)
+                love.graphics.draw(gTextures['hearth'], gFrames['hearth'][1], 70, 10)
+                love.graphics.draw(gTextures['hearth'], gFrames['hearth'][1], 130, 10)
+            end
         end
     end
 end
