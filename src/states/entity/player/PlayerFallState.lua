@@ -1,6 +1,15 @@
 PlayerFallState = Class{__includes = EntityFallState}
 
 function PlayerFallState:update(dt)
+    if love.keyboard.wasPressed('lshift') then
+        if not self.entity.isDashing then
+            self.entity:dash(dt)
+            self.entity.canDash = false
+        end
+    end
+
+    self.entity:controlDashing(dt)
+
     if love.keyboard.isDown('a') then
         self.entity.direction = 'left'
         self.entity:changeAnimation('fall-left')
@@ -24,6 +33,9 @@ function PlayerFallState:update(dt)
     for k, object in pairs(self.map.objects) do
         if object:collides(self.entity) then
             if object.solid then
+                
+                self.entity:fallDamage()
+
                 self.entity.dy = 0
                 self.entity.y = object.y - self.entity.height
 
@@ -38,8 +50,12 @@ function PlayerFallState:update(dt)
 
     -- check if we are at the ground level
     if self.entity.y >= self.map.groundLevel - self.entity.height then
+
+        self.entity:fallDamage()
+
         self.entity.y = self.map.groundLevel - self.entity.height
         self.entity.dy = 0
+
         if love.keyboard.isDown('a') then
             self.entity.direction = 'left'
             self.entity:changeState('walk')

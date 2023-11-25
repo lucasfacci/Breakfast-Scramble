@@ -2,9 +2,19 @@ PlayerJumpState = Class{__includes = EntityJumpState}
 
 function PlayerJumpState:enter(params)
     self.entity.dy = self.entity.jumpVelocity
+    self.entity.canDash = true
 end
 
 function PlayerJumpState:update(dt)
+    if love.keyboard.wasPressed('lshift') then
+        if not self.entity.isDashing then
+            self.entity:dash(dt)
+            self.entity.canDash = false
+        end
+    end
+
+    self.entity:controlDashing(dt)
+
     if love.keyboard.isDown('a') then
         self.entity.direction = 'left'
         self.entity:changeAnimation('jump-left')

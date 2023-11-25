@@ -1,5 +1,11 @@
 PlayerIdleState = Class{__includes = EntityIdleState}
 
+function PlayerIdleState:enter(params)
+    self.entity.width = ENTITY_DEFS['player'].width
+    self.entity.height = ENTITY_DEFS['player'].height
+    self.entity.canDash = true
+end
+
 function PlayerIdleState:update(dt)
     if love.keyboard.isDown('a') then
         self.entity.direction = 'left'

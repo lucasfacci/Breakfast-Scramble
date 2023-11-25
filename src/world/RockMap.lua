@@ -19,17 +19,66 @@ function RockMap:init()
 end
 
 function RockMap:generatePlatforms()
-    local aux = 1
+    local lastPlatformPosition = 0
+
     for y = -10000, self.groundLevel - 100 do
-        if y % 260 == 0 then
-            if aux % 2 == 0 then
-                local platform = GameObject(GAME_OBJECT_DEFS['rock_platform'], math.random(1, self.width / 2 - GAME_OBJECT_DEFS['rock_platform'].width), y)
+        if y % 400 == 0 then
+            
+            for i = #self.objects, 1, -1 do
+                
+                if self.objects[i]['type'] == 'rock_platform' then
+                    lastPlatformPosition = i
+                    break
+                end
+
+                if i == 1 and self.objects[i]['type'] ~= 'rock_platform' then
+                    lastPlatformPosition = 0
+                end
+            end
+
+            if lastPlatformPosition == 0 then
+                local platform = GameObject(GAME_OBJECT_DEFS['rock_platform'], math.random(self.width - GAME_OBJECT_DEFS['rock_platform'].width), y)
                 table.insert(self.objects, platform)
             else
-                local platform = GameObject(GAME_OBJECT_DEFS['rock_platform'], math.random(self.width / 2, self.width - GAME_OBJECT_DEFS['rock_platform'].width), y)
-                table.insert(self.objects, platform)
+                -- 1 means that the next platform will be in the left side of the last platform
+                -- 2 means that the next platform will be in the right side of the last platform
+                local platformSide = math.random(1, 2)
+
+                -- it checks if there is space to create a platform in the left or right side of the last platform without going out of the map boundaries
+                -- if no it changes to the other side
+                if platformSide == 1 then
+                    if self.objects[lastPlatformPosition].x - GAME_OBJECT_DEFS['rock_platform'].width - 100 < 0 then
+                        platformSide = 2
+                    end
+                else
+                    if self.objects[lastPlatformPosition].x + self.objects[lastPlatformPosition].width + GAME_OBJECT_DEFS['rock_platform'].width + 100 > self.width then
+                        platformSide = 1
+                    end
+                end
+
+                -- this variable represents the longest distance that a platform can be from the last platform, so the player can reach it
+                local longestPossibleDistance = 910
+                
+                -- if the new platform will be in the left side of the last platform
+                if platformSide == 1 then
+                    if self.objects[lastPlatformPosition].x - longestPossibleDistance < 0 then
+                        local platform = GameObject(GAME_OBJECT_DEFS['rock_platform'], math.random(0, self.objects[lastPlatformPosition].x - GAME_OBJECT_DEFS['rock_platform'].width), y)
+                        table.insert(self.objects, platform)
+                    else
+                        local platform = GameObject(GAME_OBJECT_DEFS['rock_platform'], math.random(self.objects[lastPlatformPosition].x - longestPossibleDistance, self.objects[lastPlatformPosition].x - GAME_OBJECT_DEFS['rock_platform'].width), y)
+                        table.insert(self.objects, platform)
+                    end
+                -- else if the new platform will be in the right side of the last platform
+                else
+                    if self.objects[lastPlatformPosition].x + self.objects[lastPlatformPosition].width + longestPossibleDistance > self.width - GAME_OBJECT_DEFS['rock_platform'].width then
+                        local platform = GameObject(GAME_OBJECT_DEFS['rock_platform'], math.random(self.objects[lastPlatformPosition].x + GAME_OBJECT_DEFS['rock_platform'].width, self.width - GAME_OBJECT_DEFS['rock_platform'].width), y)
+                        table.insert(self.objects, platform)
+                    else
+                        local platform = GameObject(GAME_OBJECT_DEFS['rock_platform'], math.random(self.objects[lastPlatformPosition].x + GAME_OBJECT_DEFS['rock_platform'].width, self.objects[lastPlatformPosition].x + GAME_OBJECT_DEFS['rock_platform'].width + longestPossibleDistance), y)
+                        table.insert(self.objects, platform)
+                    end
+                end
             end
-            aux = aux + 1
         end
     end
 end

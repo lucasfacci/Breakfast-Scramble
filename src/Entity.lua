@@ -20,6 +20,8 @@ function Entity:init(def)
     
     self.walkSpeed = def.walkSpeed
 
+    self.dashSpeed = def.dashSpeed
+
     self.jumpVelocity = def.jumpVelocity
     
     self.waitTimer = 0

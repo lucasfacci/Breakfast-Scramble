@@ -1,5 +1,11 @@
 PlayerWalkState = Class{__includes = EntityWalkState}
 
+function PlayerWalkState:enter(params)
+    self.entity.width = 157
+    self.entity.height = 211
+    self.entity.canDash = true
+end
+
 function PlayerWalkState:update(dt)
     -- temporarily shift player down a pixel to test for game objects beneath
     self.entity.y = self.entity.y + 1
@@ -7,6 +13,14 @@ function PlayerWalkState:update(dt)
     local collidedObjects = self.entity:checkObjectCollisions()
 
     self.entity.y = self.entity.y - 1
+    
+    if love.keyboard.wasPressed('lshift') then
+        if not self.entity.isDashing then
+            self.entity:dash(dt)
+        end
+    end
+
+    self.entity:controlDashing(dt)
     
     if #collidedObjects == 0 and self.entity.y < self.map.groundLevel - self.entity.height then
         self.entity.dy = 0

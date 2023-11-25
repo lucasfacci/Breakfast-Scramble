@@ -1,11 +1,50 @@
 Player = Class{__includes = Entity}
 
 function Player:init(def)
+    self.canDash = true
+    self.isDashing = false
+    self.dashDuration = 0.2
+    self.dashTimer = 0
+
     Entity.init(self, def)
 end
 
 function Player:update(dt)
+    if self.health <= 0 then
+        gStateStack:pop()
+        gStateStack:push(GameOverState())
+    end
+
     Entity.update(self, dt)
+end
+
+function Player:dash()
+    if self.canDash then
+        self.walkSpeed = self.dashSpeed
+        self.isDashing = true
+        self.dashTimer = self.dashDuration
+    end
+end
+
+function Player:controlDashing(dt)
+    if self.isDashing then
+        self.dashTimer = self.dashTimer - dt
+
+        if self.dashTimer <= 0 then
+            self.walkSpeed = ENTITY_DEFS['player'].walkSpeed
+            self.isDashing = false
+        end
+    end
+end
+
+function Player:fallDamage()
+    if self.dy >= 3333 and self.dy < 6666 then
+        self:damage(1)
+    elseif self.dy >= 6666 and self.dy < 9999 then
+        self:damage(2)
+    elseif self.dy >= 9999 then
+        self:damage(3)
+    end
 end
 
 function Player:checkLeftCollisions(dt) 

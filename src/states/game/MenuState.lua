@@ -21,7 +21,7 @@ function MenuState:update(dt)
 
     if love.keyboard.wasPressed('return') and option == 1 then
         gStateStack:pop()
-        gStateStack:push(PlayStoryState())
+        gStateStack:push(PlayBedroomState())
     elseif love.keyboard.wasPressed('return') and option == 2 then
         gStateStack:pop()
         gStateStack:push(CreditsState())

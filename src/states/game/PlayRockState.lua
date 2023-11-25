@@ -7,6 +7,7 @@ function PlayRockState:init()
         type = ENTITY_DEFS['player'].type,
         direction = 'front',
         walkSpeed = ENTITY_DEFS['player'].walkSpeed,
+        dashSpeed = ENTITY_DEFS['player'].dashSpeed,
         jumpVelocity = ENTITY_DEFS['player'].jumpVelocity,
         animations = ENTITY_DEFS['player'].animations,
         health = ENTITY_DEFS['player'].health,
@@ -41,11 +42,6 @@ function PlayRockState:generateRock()
 
     rock.onCollide = function()
         self.player:damage(1)
-
-        if self.player.health <= 0 then
-            gStateStack:pop()
-            gStateStack:push(GameOverState())
-        end
     end
 
     table.insert(self.map.objects, rock)
@@ -87,11 +83,19 @@ function PlayRockState:update(dt)
 
         if object.type == 'rock' then
             if object.y < self.map.groundLevel then
-                object.y = object.y + 800 * dt
+                object.y = object.y + 600 * dt
             else
                 table.remove(self.map.objects, k)
             end
         end
+    end
+
+    if self.player.x <= 0 then
+        self.player.x = 0
+    end
+
+    if self.player.x >= self.map.width - self.player.width then
+        self.player.x = self.map.width - self.player.width
     end
 end
 

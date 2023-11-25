@@ -54,5 +54,19 @@ GAME_OBJECT_DEFS = {
                 frame = 1
             }
         }
+    },
+    ['table'] = {
+        type = 'table',
+        texture = 'table',
+        frame = 1,
+        width = 460,
+        height = 345,
+        solid = false,
+        defaultState = 'stopped',
+        states = {
+            ['stopped'] = {
+                frame = 1
+            }
+        }
     }
 }

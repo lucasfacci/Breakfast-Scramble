@@ -1,8 +1,9 @@
 ENTITY_DEFS = {
     ['player'] = {
         type = 'player',
-        walkSpeed = PLAYER_WALK_SPEED,
-        jumpVelocity = PLAYER_JUMP_VELOCITY,
+        walkSpeed = 900,
+        dashSpeed = 2000,
+        jumpVelocity = -1850,
         health = 3,
         width = 200,
         height = 211,
