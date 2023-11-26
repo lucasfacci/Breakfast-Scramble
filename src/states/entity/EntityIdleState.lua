@@ -6,6 +6,7 @@ function EntityIdleState:init(entity)
 end
 
 function EntityIdleState:update(dt)
+    self.entity.currentAnimation:update(dt)
 end
 
 function EntityIdleState:render()

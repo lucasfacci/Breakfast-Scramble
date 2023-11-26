@@ -1,6 +1,22 @@
-PlayerFallState = Class{__includes = EntityFallState}
+PlayerFallShootState = Class{__includes = EntityFallShootState}
 
-function PlayerFallState:update(dt)
+function PlayerFallShootState:enter(params)
+    if self.entity.direction == 'left' then
+        self.entity.x = self.entity.x - 53
+    end
+
+    self.entity.width = 210
+    self.entity.height = 211
+
+    self.waitTimer = params.waitTimer or 0
+    self.waitDuration = params.waitDuration or 0.2
+
+    self.canDash = params.canDash or false
+
+    Event.dispatch('player-fire')
+end
+
+function PlayerFallShootState:update(dt)
     -- if press the left shift key, do a dash
     if love.keyboard.wasPressed('lshift') then
         if not self.entity.isDashing then
@@ -11,23 +27,25 @@ function PlayerFallState:update(dt)
 
     -- control the dash duration and velocity
     self.entity:controlDashing(dt)
-
-    if love.keyboard.isDown('x') then
-        if self.entity.direction ~= 'front' then
-            self.entity:changeState('fall-shoot', {})
-        end
+    
+    -- it controls the time between the shoots
+    if self.waitTimer > self.waitDuration then
+        self.waitTimer = 0
+        self.waitDuration = 0.2
+        Event.dispatch('player-fire')
     end
+    self.waitTimer = self.waitTimer + dt
 
     if love.keyboard.isDown('left') then
         self.entity.direction = 'left'
-        self.entity:changeAnimation('fall-left')
+        self.entity:changeAnimation('idle-shoot-left')
         
         self.entity.x = self.entity.x - self.entity.walkSpeed * dt
 
         self.entity:checkLeftCollisions(dt)
     elseif love.keyboard.isDown('right') then
         self.entity.direction = 'right'
-        self.entity:changeAnimation('fall-right')
+        self.entity:changeAnimation('idle-shoot-right')
 
         self.entity.x = self.entity.x + self.entity.walkSpeed * dt
 
@@ -41,6 +59,7 @@ function PlayerFallState:update(dt)
     for k, object in pairs(self.map.objects) do
         if object:collides(self.entity) then
             if object.solid then
+                
                 self.entity:fallDamage()
 
                 self.entity.dy = 0
@@ -73,5 +92,5 @@ function PlayerFallState:update(dt)
         end
     end
 
-    EntityFallState.update(self, dt)
+    EntityFallShootState.update(self, dt)
 end

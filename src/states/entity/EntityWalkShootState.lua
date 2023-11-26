@@ -1,20 +1,16 @@
-EntityWalkState = Class{__includes = BaseState}
+EntityWalkShootState = Class{__includes = BaseState}
 
-function EntityWalkState:init(entity, map)
+function EntityWalkShootState:init(entity, map)
     self.entity = entity
     self.map = map
-    self.entity:changeAnimation('walk-' .. self.entity.direction)
+    self.entity:changeAnimation('walk-shoot-' .. self.entity.direction)
 end
 
-function EntityWalkState:update(dt)
+function EntityWalkShootState:update(dt)
     self.entity.currentAnimation:update(dt)
-
-    if love.keyboard.wasPressed('z') then
-        self.entity:changeState('jump')
-    end
 end
 
-function EntityWalkState:render()
+function EntityWalkShootState:render()
     local anim = self.entity.currentAnimation
     love.graphics.draw(gTextures[anim.texture], gFrames[anim.texture][anim:getCurrentFrame()],
         math.floor(self.entity.x - self.entity.offsetX), math.floor(self.entity.y - self.entity.offsetY))

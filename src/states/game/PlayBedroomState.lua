@@ -1,6 +1,6 @@
 PlayBedroomState = Class{__includes = BaseState}
 
-function PlayBedroomState:init()
+function PlayBedroomState:init(params)
     self.map = BedroomMap()
 
     self.player = Player {
@@ -12,7 +12,7 @@ function PlayBedroomState:init()
         animations = ENTITY_DEFS['player'].animations,
         health = ENTITY_DEFS['player'].health,
 
-        x = 1068,
+        x = params.x or 1068,
         y = self.map.groundLevel - ENTITY_DEFS['player'].height,
 
         width = ENTITY_DEFS['player'].width,
@@ -26,10 +26,21 @@ function PlayBedroomState:init()
         ['idle'] = function() return PlayerIdleState(self.player) end,
         ['jump'] = function() return PlayerJumpState(self.player, self.map) end,
         ['walk'] = function() return PlayerWalkState(self.player, self.map) end,
-        ['sneak'] = function() return PlayerSneakState(self.player, self.map) end
+        ['sneak'] = function() return PlayerSneakState(self.player, self.map) end,
+        ['fall-shoot'] = function() return PlayerFallShootState(self.player, self.map) end,
+        ['idle-shoot'] = function() return PlayerIdleShootState(self.player) end,
+        ['jump-shoot'] = function() return PlayerJumpShootState(self.player, self.map) end,
+        ['walk-shoot'] = function() return PlayerWalkShootState(self.player, self.map) end
     }
 
     self.player:changeState('fall')
+
+    -- projectiles in the map/state
+    self.projectiles = {}
+
+    Event.on('player-fire', function()
+        self.player:fire(self.projectiles)
+    end)
 end
 
 function PlayBedroomState:update(dt)
@@ -48,6 +59,14 @@ function PlayBedroomState:update(dt)
             object:onCollide()
         end
     end
+
+    for k, projectile in pairs(self.projectiles) do
+        projectile:update(dt)
+
+        if projectile.x <= 0 or projectile.x >= self.map.width or projectile.y <= 0 or projectile.y >= self.map.height then
+            table.remove(self.projectiles, k)
+        end
+    end
     
     if self.player.x <= 0 then
         self.player.x = 0
@@ -62,6 +81,11 @@ function PlayBedroomState:render()
     love.graphics.push()
     self.map:render()
     self.player:render()
+
+    for k, projectile in pairs(self.projectiles) do
+        projectile:render()
+    end
+
     self.map.objects[2]:render()
     love.graphics.pop()
 end

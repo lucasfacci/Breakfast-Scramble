@@ -28,10 +28,21 @@ function PlayRockState:init()
         ['idle'] = function() return PlayerIdleState(self.player) end,
         ['jump'] = function() return PlayerJumpState(self.player, self.map) end,
         ['walk'] = function() return PlayerWalkState(self.player, self.map) end,
-        ['sneak'] = function() return PlayerSneakState(self.player, self.map) end
+        ['sneak'] = function() return PlayerSneakState(self.player, self.map) end,
+        ['fall-shoot'] = function() return PlayerFallShootState(self.player, self.map) end,
+        ['idle-shoot'] = function() return PlayerIdleShootState(self.player) end,
+        ['jump-shoot'] = function() return PlayerJumpShootState(self.player, self.map) end,
+        ['walk-shoot'] = function() return PlayerWalkShootState(self.player, self.map) end
     }
 
     self.player:changeState('fall')
+
+    -- projectiles in the map/state
+    self.projectiles = {}
+
+    Event.on('player-fire', function()
+        self.player:fire(self.projectiles)
+    end)
 
     self.rockWaitDuration = 0
     self.rockWaitTimer = 0
@@ -49,7 +60,6 @@ end
 
 function PlayRockState:randomizeRockFallTime(dt)
     if self.rockWaitDuration == 0 then
-        
         -- set an initial move duration and direction
         self.rockWaitDuration = 1
     elseif self.rockWaitTimer > self.rockWaitDuration then
@@ -90,6 +100,14 @@ function PlayRockState:update(dt)
         end
     end
 
+    for k, projectile in pairs(self.projectiles) do
+        projectile:update(dt)
+
+        if projectile.x <= 0 or projectile.x >= self.map.width or projectile.y <= 0 or projectile.y >= self.map.height then
+            table.remove(self.projectiles, k)
+        end
+    end
+
     if self.player.x <= 0 then
         self.player.x = 0
     end
@@ -107,6 +125,10 @@ function PlayRockState:render()
     love.graphics.push()
     self.map:render()
     self.player:render()
+
+    for k, projectile in pairs(self.projectiles) do
+        projectile:render()
+    end
     love.graphics.pop()
 
     if self.player.y + self.player.height / 2 <= self.map.height / 2 then

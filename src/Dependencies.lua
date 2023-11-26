@@ -12,6 +12,7 @@ require 'src/game_objects'
 require 'src/GameObject'
 require 'src/Hitbox'
 require 'src/Player'
+require 'src/Projectile'
 require 'src/StateMachine'
 require 'src/Util'
 
@@ -23,17 +24,25 @@ require 'src/world/RockMap'
 require 'src/states/BaseState'
 require 'src/states/StateStack'
 
+require 'src/states/entity/EntityFallShootState'
 require 'src/states/entity/EntityFallState'
+require 'src/states/entity/EntityIdleShootState'
 require 'src/states/entity/EntityIdleState'
+require 'src/states/entity/EntityJumpShootState'
 require 'src/states/entity/EntityJumpState'
-require 'src/states/entity/EntityWalkState'
 require 'src/states/entity/EntitySneakState'
+require 'src/states/entity/EntityWalkShootState'
+require 'src/states/entity/EntityWalkState'
 
+require 'src/states/entity/player/PlayerFallShootState'
 require 'src/states/entity/player/PlayerFallState'
+require 'src/states/entity/player/PlayerIdleShootState'
 require 'src/states/entity/player/PlayerIdleState'
+require 'src/states/entity/player/PlayerJumpShootState'
 require 'src/states/entity/player/PlayerJumpState'
-require 'src/states/entity/player/PlayerWalkState'
 require 'src/states/entity/player/PlayerSneakState'
+require 'src/states/entity/player/PlayerWalkShootState'
+require 'src/states/entity/player/PlayerWalkState'
 
 require 'src/states/game/CreditsState'
 require 'src/states/game/FadeInState'
@@ -51,6 +60,7 @@ gTextures = {
     ['character_idle'] = love.graphics.newImage('graphics/c_stand.png'),
     ['character_walk'] = love.graphics.newImage('graphics/c_running_frs2_fixed.png'),
     ['character_sneak'] = love.graphics.newImage('graphics/c_sneaking.png'),
+    ['character_shoot'] = love.graphics.newImage('graphics/c_shooting1.png'),
     ['bedroom_background'] = love.graphics.newImage('graphics/bedroom_background.png'),
     ['kitchen_background'] = love.graphics.newImage('graphics/kitchen_background.png'),
     ['hearth'] = love.graphics.newImage('graphics/hearth.png'),
@@ -66,6 +76,7 @@ gFrames = {
     ['character_idle'] = GenerateQuads(gTextures['character_idle'], ENTITY_DEFS['player'].width, ENTITY_DEFS['player'].height),
     ['character_walk'] = GenerateQuads(gTextures['character_walk'], 157, 211),
     ['character_sneak'] = GenerateQuads(gTextures['character_sneak'], 223, 174),
+    ['character_shoot'] = GenerateQuads(gTextures['character_shoot'], 210, 211),
     ['bedroom_background'] = GenerateQuads(gTextures['bedroom_background'], 1920, 1080),
     ['kitchen_background'] = GenerateQuads(gTextures['kitchen_background'], 1920, 1080),
     ['hearth'] = GenerateQuads(gTextures['hearth'], 70, 70),
@@ -80,5 +91,5 @@ gFrames = {
 gFonts = {
     ['yesevaone-small'] = love.graphics.newFont('fonts/Yeseva_One/YesevaOne-Regular.ttf', 32),
     ['yesevaone-medium'] = love.graphics.newFont('fonts/Yeseva_One/YesevaOne-Regular.ttf', 64),
-    ['yesevaone-large'] = love.graphics.newFont('fonts/Yeseva_One/YesevaOne-Regular.ttf', 128),
+    ['yesevaone-large'] = love.graphics.newFont('fonts/Yeseva_One/YesevaOne-Regular.ttf', 128)
 }

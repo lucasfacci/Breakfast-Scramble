@@ -5,6 +5,7 @@ function Player:init(def)
     self.isDashing = false
     self.dashDuration = 0.2
     self.dashTimer = 0
+    self.up = false
 
     Entity.init(self, def)
 end
@@ -15,7 +16,17 @@ function Player:update(dt)
         gStateStack:push(GameOverState())
     end
 
+    if love.keyboard.isDown('up') then
+        self.up = true
+    else
+        self.up = false
+    end
+
     Entity.update(self, dt)
+end
+
+function Player:fire(projectiles, width, height, velocity, r, g, b)
+    table.insert(projectiles, Projectile(self, width, height, velocity, r, g, b))
 end
 
 function Player:dash()

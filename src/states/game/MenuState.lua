@@ -5,13 +5,13 @@ function MenuState:init()
 end
 
 function MenuState:update(dt)
-    if love.keyboard.wasPressed('w') or love.keyboard.wasPressed('up') then
+    if love.keyboard.wasPressed('up') or love.keyboard.wasPressed('up') then
         if option == 1 then
             option = 4
         else
             option = option - 1
         end
-    elseif love.keyboard.wasPressed('s') or love.keyboard.wasPressed('down') then
+    elseif love.keyboard.wasPressed('down') or love.keyboard.wasPressed('down') then
         if option == 4 then
             option = 1
         else
@@ -21,7 +21,7 @@ function MenuState:update(dt)
 
     if love.keyboard.wasPressed('return') and option == 1 then
         gStateStack:pop()
-        gStateStack:push(PlayBedroomState())
+        gStateStack:push(PlayBedroomState({}))
     elseif love.keyboard.wasPressed('return') and option == 2 then
         gStateStack:pop()
         gStateStack:push(CreditsState())

@@ -26,10 +26,21 @@ function PlayKitchenState:init()
         ['idle'] = function() return PlayerIdleState(self.player) end,
         ['jump'] = function() return PlayerJumpState(self.player, self.map) end,
         ['walk'] = function() return PlayerWalkState(self.player, self.map) end,
-        ['sneak'] = function() return PlayerSneakState(self.player, self.map) end
+        ['sneak'] = function() return PlayerSneakState(self.player, self.map) end,
+        ['fall-shoot'] = function() return PlayerFallShootState(self.player, self.map) end,
+        ['idle-shoot'] = function() return PlayerIdleShootState(self.player) end,
+        ['jump-shoot'] = function() return PlayerJumpShootState(self.player, self.map) end,
+        ['walk-shoot'] = function() return PlayerWalkShootState(self.player, self.map) end
     }
 
     self.player:changeState('fall')
+
+    -- projectiles in the map/state
+    self.projectiles = {}
+
+    Event.on('player-fire', function()
+        self.player:fire(self.projectiles)
+    end)
 end
 
 function PlayKitchenState:update(dt)
@@ -48,9 +59,22 @@ function PlayKitchenState:update(dt)
             object:onCollide()
         end
     end
+
+    for k, projectile in pairs(self.projectiles) do
+        projectile:update(dt)
+
+        if projectile.x <= 0 or projectile.x >= self.map.width or projectile.y <= 0 or projectile.y >= self.map.height then
+            table.remove(self.projectiles, k)
+        end
+    end
     
     if self.player.x <= 0 then
         self.player.x = 0
+
+        if love.keyboard.wasPressed('e') then
+            gStateStack:pop()
+            gStateStack:push(PlayBedroomState({x = MAP_WIDTH - self.player.width}))
+        end
     end
 
     if self.player.x >= self.map.width - self.player.width then
@@ -67,6 +91,10 @@ function PlayKitchenState:render()
     love.graphics.push()
     self.map:render()
     self.player:render()
+
+    for k, projectile in pairs(self.projectiles) do
+        projectile:render()
+    end
 
     for k, object in pairs(self.map.objects) do
         object:render()

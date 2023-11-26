@@ -13,20 +13,30 @@ function PlayerWalkState:update(dt)
     local collidedObjects = self.entity:checkObjectCollisions()
 
     self.entity.y = self.entity.y - 1
+
+    if love.keyboard.wasPressed('c') then
+        self.entity:changeState('idle-shoot')
+    end
+
+    if love.keyboard.isDown('x') then
+        self.entity:changeState('walk-shoot')
+    end
     
+    -- if press the left shift key, do a dash
     if love.keyboard.wasPressed('lshift') then
         if not self.entity.isDashing then
             self.entity:dash(dt)
         end
     end
 
+    -- control the dash duration and velocity
     self.entity:controlDashing(dt)
     
     if #collidedObjects == 0 and self.entity.y < self.map.groundLevel - self.entity.height then
         self.entity.dy = 0
         self.entity:changeState('fall')
     -- walk straight to the left side
-    elseif love.keyboard.isDown('a') then
+    elseif love.keyboard.isDown('left') then
         self.entity.direction = 'left'
         self.entity:changeAnimation('walk-left')
         
@@ -34,7 +44,7 @@ function PlayerWalkState:update(dt)
 
         self.entity:checkLeftCollisions(dt)
     -- walk straight to the right side
-    elseif love.keyboard.isDown('d') then
+    elseif love.keyboard.isDown('right') then
         self.entity.direction = 'right'
         self.entity:changeAnimation('walk-right')
 
