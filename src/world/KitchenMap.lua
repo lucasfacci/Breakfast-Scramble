@@ -26,6 +26,14 @@ function KitchenMap:generateGameObjects()
     end
 
     table.insert(self.objects, kitchen_table)
+
+    local mother = GameObject(GAME_OBJECT_DEFS['mother'], self.width / 3 + 20, self.groundLevel - 475)
+
+    mother.onCollide = function()
+
+    end
+
+    table.insert(self.objects, mother)
 end
 
 function KitchenMap:update(dt)
@@ -33,5 +41,4 @@ end
 
 function KitchenMap:render()
     love.graphics.draw(gTextures['kitchen_background'], gFrames['kitchen_background'][1], 0, 0)
-    love.graphics.draw(gTextures['mother'], gFrames['mother'][1], self.width / 3 + 20, self.groundLevel - 475)
 end

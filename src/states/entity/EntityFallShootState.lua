@@ -3,7 +3,7 @@ EntityFallShootState = Class{__includes = BaseState}
 function EntityFallShootState:init(entity, map)
     self.entity = entity
     self.map = map
-    self.entity:changeAnimation('idle-shoot-' .. self.entity.direction)
+    self.entity:changeAnimation('jump-shoot-' .. self.entity.direction)
 end
 
 function EntityFallShootState:update(dt)

@@ -23,12 +23,14 @@ ENTITY_DEFS = {
                 interval = 0.1
             },
             ['idle-shoot-left'] = {
-                frames = {1},
-                texture = 'character_shoot'
+                frames = {4, 5, 6},
+                texture = 'character_idle_shoot',
+                interval = 0.1
             },
             ['idle-shoot-right'] = {
-                frames = {24},
-                texture = 'character_shoot'
+                frames = {1, 2, 3},
+                texture = 'character_idle_shoot',
+                interval = 0.1
             },
             ['walk-shoot-left'] = {
                 frames = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17},
@@ -39,6 +41,14 @@ ENTITY_DEFS = {
                 frames = {24, 23, 22, 21, 20, 19, 30, 29, 28, 27, 26, 25, 36, 35, 34, 33, 32},
                 texture = 'character_shoot',
                 interval = 0.1
+            },
+            ['jump-shoot-left'] = {
+                frames = {1},
+                texture = 'character_shoot'
+            },
+            ['jump-shoot-right'] = {
+                frames = {24},
+                texture = 'character_shoot'
             },
             ['fall-front'] = {
                 frames = {1},

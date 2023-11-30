@@ -30,10 +30,6 @@ function GameObject:collides(target)
         target.y > self.y + self.height or self.y > target.y + target.height)
 end
 
-function GameObject:update(dt)
-
-end
-
 function GameObject:render()
     love.graphics.setColor(1, 1, 1, self.opacity)
     love.graphics.draw(gTextures[self.texture], gFrames[self.texture][self.states[self.state].frame or self.frame],

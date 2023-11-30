@@ -7,6 +7,8 @@ end
 function StateStack:update(dt)
     -- self.states[#self.states]:update(dt)
 
+    -- -- DEBUG
+    -- print(#self.states)
     for k, state in ipairs(self.states) do
         state:update(dt)
     end

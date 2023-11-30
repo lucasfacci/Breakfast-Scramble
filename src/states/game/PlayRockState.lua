@@ -85,7 +85,6 @@ function PlayRockState:update(dt)
     self:randomizeRockFallTime(dt)
 
     for k, object in pairs(self.map.objects) do
-        object:update(dt)
         -- trigger collision callback on object
         if self.player:collides(object) then
             object:onCollide()

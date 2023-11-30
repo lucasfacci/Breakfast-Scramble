@@ -1,4 +1,18 @@
 GAME_OBJECT_DEFS = {
+    ['mother'] = {
+        type = 'mother',
+        texture = 'mother',
+        frame = 1,
+        width = 234,
+        height = 475,
+        solid = false,
+        defaultState = 'stopped',
+        states = {
+            ['stopped'] = {
+                frame = 1
+            }
+        }
+    },
     ['rock'] = {
         type = 'rock',
         texture = 'rock',

@@ -16,10 +16,8 @@ require 'src/Projectile'
 require 'src/StateMachine'
 require 'src/Util'
 
-require 'src/world/BedroomMap'
-require 'src/world/KitchenMap'
-require 'src/world/Map'
-require 'src/world/RockMap'
+require 'src/gui/Panel'
+require 'src/gui/Textbox'
 
 require 'src/states/BaseState'
 require 'src/states/StateStack'
@@ -45,6 +43,7 @@ require 'src/states/entity/player/PlayerWalkShootState'
 require 'src/states/entity/player/PlayerWalkState'
 
 require 'src/states/game/CreditsState'
+require 'src/states/game/DialogueState'
 require 'src/states/game/FadeInState'
 require 'src/states/game/FadeOutState'
 require 'src/states/game/GameOverState'
@@ -56,20 +55,28 @@ require 'src/states/game/PlayKitchenState'
 require 'src/states/game/PlayRockState'
 require 'src/states/game/PlayState'
 
+require 'src/world/BedroomMap'
+require 'src/world/KitchenMap'
+require 'src/world/Map'
+require 'src/world/RockMap'
+
 gTextures = {
-    ['character_idle'] = love.graphics.newImage('graphics/c_stand.png'),
-    ['character_walk'] = love.graphics.newImage('graphics/c_running_frs2_fixed.png'),
-    ['character_sneak'] = love.graphics.newImage('graphics/c_sneaking.png'),
-    ['character_shoot'] = love.graphics.newImage('graphics/c_shooting1.png'),
+    ['character_idle'] = love.graphics.newImage('graphics/character_idle.png'),
+    ['character_walk'] = love.graphics.newImage('graphics/character_walk.png'),
+    ['character_sneak'] = love.graphics.newImage('graphics/character_sneak.png'),
+    ['character_shoot'] = love.graphics.newImage('graphics/character_walk_shoot.png'),
+    ['character_idle_shoot'] = love.graphics.newImage('graphics/character_idle_shoot.png'),
     ['bedroom_background'] = love.graphics.newImage('graphics/bedroom_background.png'),
     ['kitchen_background'] = love.graphics.newImage('graphics/kitchen_background.png'),
+    ['player_dialogue_icon'] = love.graphics.newImage('graphics/player_dialogue_icon.png'),
+    ['mother_dialogue_icon'] = love.graphics.newImage('graphics/mother_dialogue_icon.png'),
     ['hearth'] = love.graphics.newImage('graphics/hearth.png'),
-    ['mother'] = love.graphics.newImage('graphics/mother1.png'),
+    ['mother'] = love.graphics.newImage('graphics/mother.png'),
     ['rock'] = love.graphics.newImage('graphics/rock.png'),
     ['rock_platform'] = love.graphics.newImage('graphics/rock_platform.png'),
     ['door'] = love.graphics.newImage('graphics/door.png'),
     ['bed'] = love.graphics.newImage('graphics/bed.png'),
-    ['table'] = love.graphics.newImage('graphics/table1.png')
+    ['table'] = love.graphics.newImage('graphics/table.png')
 }
 
 gFrames = {
@@ -77,8 +84,11 @@ gFrames = {
     ['character_walk'] = GenerateQuads(gTextures['character_walk'], 157, 211),
     ['character_sneak'] = GenerateQuads(gTextures['character_sneak'], 223, 174),
     ['character_shoot'] = GenerateQuads(gTextures['character_shoot'], 210, 211),
+    ['character_idle_shoot'] = GenerateQuads(gTextures['character_idle_shoot'], 255, 211),
     ['bedroom_background'] = GenerateQuads(gTextures['bedroom_background'], 1920, 1080),
     ['kitchen_background'] = GenerateQuads(gTextures['kitchen_background'], 1920, 1080),
+    ['player_dialogue_icon'] = GenerateQuads(gTextures['player_dialogue_icon'], 120, 129),
+    ['mother_dialogue_icon'] = GenerateQuads(gTextures['mother_dialogue_icon'], 145, 167),
     ['hearth'] = GenerateQuads(gTextures['hearth'], 70, 70),
     ['mother'] = GenerateQuads(gTextures['mother'], 234, 475),
     ['rock'] = GenerateQuads(gTextures['rock'], GAME_OBJECT_DEFS['rock'].width, GAME_OBJECT_DEFS['rock'].height),

@@ -22,10 +22,10 @@ function BedroomMap:generateGameObjects()
     door.onCollide = function()
         if love.keyboard.wasPressed('e') then
             gStateStack:pop()
-            gStateStack:push(PlayKitchenState())
+            gStateStack:push(PlayKitchenState({firstTimeInScene = true}))
         end
     end
-
+    
     table.insert(self.objects, door)
 
     local bed = GameObject(GAME_OBJECT_DEFS['bed'], 350, self.groundLevel - GAME_OBJECT_DEFS['bed'].height)
@@ -37,6 +37,10 @@ function BedroomMap:generateGameObjects()
     end
 
     table.insert(self.objects, bed)
+
+    local mother = GameObject(GAME_OBJECT_DEFS['mother'], self.width - GAME_OBJECT_DEFS['mother'].width - 50, self.groundLevel - 475)
+
+    table.insert(self.objects, mother)
 end
 
 function BedroomMap:update(dt)
@@ -46,4 +50,8 @@ function BedroomMap:render()
     love.graphics.draw(gTextures['bedroom_background'], gFrames['bedroom_background'][1], 0, 0)
 
     self.objects[1]:render()
+
+    if self.objects[3] then
+        self.objects[3]:render()
+    end
 end

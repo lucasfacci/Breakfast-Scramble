@@ -40,14 +40,14 @@ function PlayerJumpShootState:update(dt)
 
     if love.keyboard.isDown('left') then
         self.entity.direction = 'left'
-        self.entity:changeAnimation('idle-shoot-left')
+        self.entity:changeAnimation('jump-shoot-left')
         
         self.entity.x = self.entity.x - self.entity.walkSpeed * dt
 
         self.entity:checkLeftCollisions(dt)
     elseif love.keyboard.isDown('right') then
         self.entity.direction = 'right'
-        self.entity:changeAnimation('idle-shoot-right')
+        self.entity:changeAnimation('jump-shoot-right')
 
         self.entity.x = self.entity.x + self.entity.walkSpeed * dt
 

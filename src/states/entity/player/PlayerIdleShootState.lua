@@ -1,9 +1,12 @@
 PlayerIdleShootState = Class{__includes = EntityIdleShootState}
 
 function PlayerIdleShootState:enter(params)
-    self.entity.width = 200
+    self.entity.width = 255
     self.entity.height = 211
     self.entity.canDash = false
+    if self.entity.direction == 'left' then
+        self.entity.x = self.entity.x - 55
+    end
 
     self.waitTimer = 0
     self.waitDuration = 0.2
@@ -26,32 +29,28 @@ function PlayerIdleShootState:update(dt)
     end
 
     if not love.keyboard.isDown('c') then
-        self.entity:changeState('walk')
+        if self.entity.direction == 'left' then
+            self.entity.x = self.entity.x + 55
+        end
+
+        if not love.keyboard.wasPressed('left') and not love.keyboard.wasPressed('right') then
+            self.entity.direction = 'front'
+            self.entity:changeState('idle')
+        else
+            self.entity:changeState('walk')
+        end
     end
 
     if love.keyboard.wasPressed('left') then
         self.entity.direction = 'left'
+        self.entity:changeState('idle-shoot')
     elseif love.keyboard.wasPressed('right') then
+        if self.entity.direction == 'left' then
+            self.entity.x = self.entity.x + 55
+        end
         self.entity.direction = 'right'
+        self.entity:changeState('idle-shoot')
     end
-
-    -- if love.keyboard.isDown('left') then
-    --     self.entity.direction = 'left'
-    --     self.entity:changeState('walk')
-    -- elseif love.keyboard.isDown('right') then
-    --     self.entity.direction = 'right'
-    --     self.entity:changeState('walk')
-    -- end
-
-    -- if love.keyboard.isDown('down') then
-    --     self.entity.direction = 'front'
-    --     self.entity:changeState('sneak')
-    -- end
-
-    -- if love.keyboard.wasPressed('z') then
-    --     self.entity.direction = 'front'
-    --     self.entity:changeState('jump')
-    -- end
 
     EntityIdleShootState.update(self, dt)
 end

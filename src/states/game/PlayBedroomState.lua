@@ -3,6 +3,9 @@ PlayBedroomState = Class{__includes = BaseState}
 function PlayBedroomState:init(params)
     self.map = BedroomMap()
 
+    self.firstTimeInScene = params.firstTimeInScene or false
+    self.playerBlocked = false
+
     self.player = Player {
         type = ENTITY_DEFS['player'].type,
         direction = 'front',
@@ -12,8 +15,8 @@ function PlayBedroomState:init(params)
         animations = ENTITY_DEFS['player'].animations,
         health = ENTITY_DEFS['player'].health,
 
-        x = params.x or 1068,
-        y = self.map.groundLevel - ENTITY_DEFS['player'].height,
+        x = params.x or 610,
+        y = params.y or self.map.groundLevel - 380,
 
         width = ENTITY_DEFS['player'].width,
         height = ENTITY_DEFS['player'].height,
@@ -33,7 +36,7 @@ function PlayBedroomState:init(params)
         ['walk-shoot'] = function() return PlayerWalkShootState(self.player, self.map) end
     }
 
-    self.player:changeState('fall')
+    self.player:changeState('idle')
 
     -- projectiles in the map/state
     self.projectiles = {}
@@ -41,6 +44,24 @@ function PlayBedroomState:init(params)
     Event.on('player-fire', function()
         self.player:fire(self.projectiles)
     end)
+    
+    if self.firstTimeInScene == true then
+        self.playerBlocked = true
+        Timer.after(4,
+            function()
+                gStateStack:push(DialogueState(' Mother: \n\n\n' ..
+                    ' Time to jump out of bed and get ready for the morning! \n' ..
+                    ' **Press Space to jump** \n\n\n' ..
+                    ' **Move with Arrows** ',
+                    function()
+                        self.playerBlocked = false
+
+                        Timer.after(2, function() table.remove(self.map.objects, 3) end)
+                    end)
+                )
+            end
+        )
+    end
 end
 
 function PlayBedroomState:update(dt)
@@ -50,7 +71,9 @@ function PlayBedroomState:update(dt)
         love.event.quit()
     end
 
-    self.player:update(dt)
+    if self.playerBlocked == false then
+        self.player:update(dt)
+    end
     self.map:update(dt)
 
     for k, object in pairs(self.map.objects) do

@@ -1,7 +1,10 @@
 PlayKitchenState = Class{__includes = BaseState}
 
-function PlayKitchenState:init()
+function PlayKitchenState:init(params)
     self.map = KitchenMap()
+
+    self.firstTimeInScene = params.firstTimeInScene or false
+    self.playerBlocked = false
 
     self.player = Player {
         type = ENTITY_DEFS['player'].type,
@@ -41,6 +44,23 @@ function PlayKitchenState:init()
     Event.on('player-fire', function()
         self.player:fire(self.projectiles)
     end)
+
+    if self.firstTimeInScene then
+        self.playerBlocked = true
+        Timer.after(3,
+            function()
+                gStateStack:push(DialogueState(' Mother: \n\n\n' ..
+                    ' Glad to see you awake sweaty. \n' ..
+                    ' Oh my, look at that messy hair! \n\n\n' ..
+                    ' Say, before you get dressed up for the day, we are all out of eggs. \n' ..
+                    ' Be a peach and go to Mr. X house/Mrs. Y stall and see if they have any. ',
+                    function()
+                        self.playerBlocked = false
+                    end)
+                )
+            end
+        )
+    end
 end
 
 function PlayKitchenState:update(dt)
@@ -50,7 +70,9 @@ function PlayKitchenState:update(dt)
         love.event.quit()
     end
 
-    self.player:update(dt)
+    if self.playerBlocked == false then
+        self.player:update(dt)
+    end
     self.map:update(dt)
 
     for k, object in pairs(self.map.objects) do
@@ -73,7 +95,7 @@ function PlayKitchenState:update(dt)
 
         if love.keyboard.wasPressed('e') then
             gStateStack:pop()
-            gStateStack:push(PlayBedroomState({x = MAP_WIDTH - self.player.width}))
+            gStateStack:push(PlayBedroomState({x = MAP_WIDTH - self.player.width, y = self.map.groundLevel - self.player.height}))
         end
     end
 
