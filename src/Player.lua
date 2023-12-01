@@ -25,10 +25,6 @@ function Player:update(dt)
     Entity.update(self, dt)
 end
 
-function Player:fire(projectiles, width, height, velocity, r, g, b)
-    table.insert(projectiles, Projectile(self, width, height, velocity, r, g, b))
-end
-
 function Player:dash()
     if self.canDash then
         self.walkSpeed = self.dashSpeed

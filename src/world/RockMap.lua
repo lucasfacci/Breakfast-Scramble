@@ -4,14 +4,14 @@ function RockMap:init()
     self.width = MAP_WIDTH
     self.height = MAP_HEIGHT
 
-    self.topLevel = -10000
+    self.topLevel = -15000
     self.groundLevel = MAP_HEIGHT - 30
 
     self.renderOffsetX = MAP_RENDER_OFFSET_X
     self.renderOffsetY = MAP_RENDER_OFFSET_Y
 
     self.gravityOn = true
-    self.gravityAmount = GRAVITY_AMOUNT
+    self.gravityAmount = GRAVITY_AMOUNT - 30
 
     self.objects = {}
 
@@ -81,6 +81,9 @@ function RockMap:generatePlatforms()
             end
         end
     end
+
+    local platform = GameObject(GAME_OBJECT_DEFS['rock_platform'], self.width - GAME_OBJECT_DEFS['rock_platform'].width, -10400)
+            table.insert(self.objects, platform)
 end
 
 function RockMap:update(dt)
@@ -88,7 +91,7 @@ end
 
 function RockMap:render()
     love.graphics.setColor(180/255, 180/255, 180/255)
-    love.graphics.rectangle('fill', 0, -10000, MAP_WIDTH, 10000 + MAP_HEIGHT)
+    love.graphics.rectangle('fill', 0, self.topLevel, MAP_WIDTH, -self.topLevel + MAP_HEIGHT)
     love.graphics.setColor(255/255, 255/255, 255/255)
 
     if self.player then
@@ -97,9 +100,9 @@ function RockMap:render()
 
     for k, object in pairs(self.objects) do
         object:render()
-        -- DEBUG
-        love.graphics.setColor(255, 0, 255, 255)
-        love.graphics.rectangle('line', object.x, object.y, object.width, object.height)
-        love.graphics.setColor(255, 255, 255, 255)
+        -- -- DEBUG
+        -- love.graphics.setColor(255, 0, 255, 255)
+        -- love.graphics.rectangle('line', object.x, object.y, object.width, object.height)
+        -- love.graphics.setColor(255, 255, 255, 255)
     end
 end

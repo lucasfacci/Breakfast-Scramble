@@ -58,6 +58,10 @@ function Entity:changeAnimation(name)
     self.currentAnimation = self.animations[name]
 end
 
+function Entity:fire(projectiles, target)
+    table.insert(projectiles, Projectile(self, target))
+end
+
 function Entity:update(dt)
     self.stateMachine:update(dt)
 

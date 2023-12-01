@@ -4,7 +4,6 @@ push = require 'lib/push'
 Timer = require 'lib/knife.timer'
 
 require 'src/Animation'
-require 'src/Boss'
 require 'src/Camera'
 require 'src/constants'
 require 'src/entity_defs'
@@ -55,11 +54,13 @@ require 'src/states/game/LevelSelectorState'
 require 'src/states/game/MenuState'
 require 'src/states/game/PlayBedroomState'
 require 'src/states/game/PlayBossState'
+require 'src/states/game/PlayEggState'
 require 'src/states/game/PlayKitchenState'
 require 'src/states/game/PlayRockState'
 
 require 'src/world/BedroomMap'
 require 'src/world/BossMap'
+require 'src/world/EggMap'
 require 'src/world/KitchenMap'
 require 'src/world/RockMap'
 
@@ -67,17 +68,21 @@ gTextures = {
     ['character_idle'] = love.graphics.newImage('graphics/character_idle.png'),
     ['character_walk'] = love.graphics.newImage('graphics/character_walk.png'),
     ['character_sneak'] = love.graphics.newImage('graphics/character_sneak.png'),
+    ['character_carry'] = love.graphics.newImage('graphics/character_carry.png'),
     ['character_shoot'] = love.graphics.newImage('graphics/character_walk_shoot.png'),
     ['character_idle_shoot'] = love.graphics.newImage('graphics/character_idle_shoot.png'),
     ['boss_idle'] = love.graphics.newImage('graphics/boss_anim.png'),
+    ['little_character'] = love.graphics.newImage('graphics/little_character.png'),
+    ['little_boss'] = love.graphics.newImage('graphics/little_boss.png'),
     ['bedroom_background'] = love.graphics.newImage('graphics/bedroom_background.png'),
     ['kitchen_background'] = love.graphics.newImage('graphics/kitchen_background.png'),
-    ['player_dialogue_icon'] = love.graphics.newImage('graphics/player_dialogue_icon.png'),
-    ['mother_dialogue_icon'] = love.graphics.newImage('graphics/mother_dialogue_icon.png'),
+    ['overworld_background'] = love.graphics.newImage('graphics/overworld_background1.png'),
     ['hearth'] = love.graphics.newImage('graphics/hearth.png'),
     ['mother'] = love.graphics.newImage('graphics/mother.png'),
     ['rock1'] = love.graphics.newImage('graphics/rock1.png'),
     ['rock2'] = love.graphics.newImage('graphics/rock2.png'),
+    ['egg'] = love.graphics.newImage('graphics/egg.png'),
+    ['nest'] = love.graphics.newImage('graphics/nest.png'),
     ['rock_platform'] = love.graphics.newImage('graphics/rock_platform.png'),
     ['door'] = love.graphics.newImage('graphics/Door1.png'),
     ['bed'] = love.graphics.newImage('graphics/bed.png'),
@@ -88,17 +93,21 @@ gFrames = {
     ['character_idle'] = GenerateQuads(gTextures['character_idle'], ENTITY_DEFS['player'].width, ENTITY_DEFS['player'].height),
     ['character_walk'] = GenerateQuads(gTextures['character_walk'], 157, 211),
     ['character_sneak'] = GenerateQuads(gTextures['character_sneak'], 223, 174),
+    ['character_carry'] = GenerateQuads(gTextures['character_carry'], 220, 256),
     ['character_shoot'] = GenerateQuads(gTextures['character_shoot'], 210, 211),
     ['character_idle_shoot'] = GenerateQuads(gTextures['character_idle_shoot'], 255, 211),
     ['boss_idle'] = GenerateQuads(gTextures['boss_idle'], 464, 529),
+    ['little_character'] = GenerateQuads(gTextures['little_character'], 50, 50),
+    ['little_boss'] = GenerateQuads(gTextures['little_boss'], 50, 50),
     ['bedroom_background'] = GenerateQuads(gTextures['bedroom_background'], 1920, 1080),
     ['kitchen_background'] = GenerateQuads(gTextures['kitchen_background'], 1920, 1080),
-    ['player_dialogue_icon'] = GenerateQuads(gTextures['player_dialogue_icon'], 120, 129),
-    ['mother_dialogue_icon'] = GenerateQuads(gTextures['mother_dialogue_icon'], 145, 167),
+    ['overworld_background'] = GenerateQuads(gTextures['overworld_background'], 978, 1080),
     ['hearth'] = GenerateQuads(gTextures['hearth'], 70, 70),
     ['mother'] = GenerateQuads(gTextures['mother'], 234, 475),
     ['rock1'] = GenerateQuads(gTextures['rock1'], GAME_OBJECT_DEFS['rock1'].width, GAME_OBJECT_DEFS['rock1'].height),
     ['rock2'] = GenerateQuads(gTextures['rock2'], GAME_OBJECT_DEFS['rock2'].width, GAME_OBJECT_DEFS['rock2'].height),
+    ['egg'] = GenerateQuads(gTextures['egg'], GAME_OBJECT_DEFS['egg'].width, GAME_OBJECT_DEFS['egg'].height),
+    ['nest'] = GenerateQuads(gTextures['nest'], GAME_OBJECT_DEFS['nest'].width, GAME_OBJECT_DEFS['nest'].height),
     ['rock_platform'] = GenerateQuads(gTextures['rock_platform'], GAME_OBJECT_DEFS['rock_platform'].width, GAME_OBJECT_DEFS['rock_platform'].height),
     ['door'] = GenerateQuads(gTextures['door'], GAME_OBJECT_DEFS['door'].width, GAME_OBJECT_DEFS['door'].height),
     ['bed'] = GenerateQuads(gTextures['bed'], GAME_OBJECT_DEFS['bed'].width, GAME_OBJECT_DEFS['bed'].height),

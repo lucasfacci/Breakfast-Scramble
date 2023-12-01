@@ -1,6 +1,10 @@
-BossMap = Class{}
+EggMap = Class{}
 
-function BossMap:init()
+function EggMap:init()
+    self.name = 'eggmap'
+
+    self.finish = false
+
     self.width = MAP_WIDTH
     self.height = MAP_HEIGHT
 
@@ -13,16 +17,12 @@ function BossMap:init()
     self.gravityAmount = GRAVITY_AMOUNT
 
     self.objects = {}
-    self:generateGameObjects()
 end
 
-function BossMap:generateGameObjects()
+function EggMap:update(dt)
 end
 
-function BossMap:update(dt)
-end
-
-function BossMap:render()
+function EggMap:render()
     love.graphics.setColor(180/255, 180/255, 180/255)
     love.graphics.rectangle('fill', 0, 0, MAP_WIDTH, MAP_HEIGHT)
     love.graphics.setColor(255/255, 255/255, 255/255)
@@ -40,7 +40,7 @@ function BossMap:render()
     
     for k, object in pairs(self.objects) do
         object:render()
-        -- -- DEBUG
+        -- DEBUG
         -- love.graphics.setColor(255, 0, 255, 255)
         -- love.graphics.rectangle('line', object.x, object.y, object.width, object.height)
         -- love.graphics.setColor(255, 255, 255, 255)

@@ -34,8 +34,20 @@ function PlayerFallState:update(dt)
         self.entity:checkRightCollisions(dt)
     end
     
-    self.entity.dy = self.entity.dy + self.map.gravityAmount
-    self.entity.y = self.entity.y + (self.entity.dy * dt)
+    if self.map.finish == true then
+        self.entity:changeAnimation('carry')
+        Timer.after(5, function()
+            self.entity.dy = self.entity.dy + self.map.gravityAmount
+            self.entity.y = self.entity.y + (self.entity.dy * dt)
+            Timer.after(3, function()
+                gStateStack:pop()
+                gStateStack:push(CreditsState())
+            end)
+        end)
+    else
+        self.entity.dy = self.entity.dy + self.map.gravityAmount
+        self.entity.y = self.entity.y + (self.entity.dy * dt)
+    end
 
     -- check if we've collided with any collidable game objects
     for k, object in pairs(self.map.objects) do
@@ -56,21 +68,25 @@ function PlayerFallState:update(dt)
     end
 
     -- check if we are at the ground level
-    if self.entity.y >= self.map.groundLevel - self.entity.height then
-        self.entity:fallDamage()
+    if self.map.finish == false then
+        if self.entity.y >= self.map.groundLevel - self.entity.height then
+            self.entity:fallDamage()
 
-        self.entity.y = self.map.groundLevel - self.entity.height
-        self.entity.dy = 0
+            self.entity.y = self.map.groundLevel - self.entity.height
+            self.entity.dy = 0
 
-        if love.keyboard.isDown('left') then
-            self.entity.direction = 'left'
-            self.entity:changeState('walk')
-        elseif love.keyboard.isDown('right') then
-            self.entity.direction = 'right'
-            self.entity:changeState('walk')
-        else
-            self.entity:changeState('idle')
+            if love.keyboard.isDown('left') then
+                self.entity.direction = 'left'
+                self.entity:changeState('walk')
+            elseif love.keyboard.isDown('right') then
+                self.entity.direction = 'right'
+                self.entity:changeState('walk')
+            else
+                self.entity:changeState('idle')
+            end
         end
+    elseif self.map.finish == true then
+
     end
 
     EntityFallState.update(self, dt)

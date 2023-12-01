@@ -1,7 +1,8 @@
 Projectile = Class{}
 
-function Projectile:init(shooter, r, g, b)
+function Projectile:init(shooter, target)
     self.entity = shooter
+    self.target = target
 
     self.width = 30
     self.height = 30
@@ -21,11 +22,20 @@ function Projectile:init(shooter, r, g, b)
     end
     self.dy = -self.velocity
 
-    self.r = 53
-    self.g = 156
-    self.b = 204
+    if self.entity.type == 'player' then
+        self.r = 53
+        self.g = 156
+        self.b = 204
+    elseif self.entity.type == 'boss' then
+        self.r = 53
+        self.g = 204
+        self.b = 156
+        self.y = self.entity.y + self.entity.height / 2 + 50
+    end
 
     self.hitbox = Hitbox(self.x, self.y, self.width, self.height)
+
+    self.hit = false
 end
 
 function Projectile:update(dt)
@@ -35,11 +45,24 @@ function Projectile:update(dt)
     else
         self.x = self.x + self.dx * dt
     end
-    -- self.y = self.y + self.dy * dt
+
+    self.hitbox.x = self.x
+    self.hitbox.y = self.y
+
+    if self.target then
+        if self.target:collides(self.hitbox) and not self.target.dead and self.target.immunityDuration == 0 then
+            self.target:damage(1)
+            self.hit = true
+        end
+    end
 end
 
 function Projectile:render()
     love.graphics.setColor(self.r/255, self.g/255, self.b/255, 255)
     love.graphics.rectangle('fill', self.x, self.y, self.width, self.height)
     love.graphics.setColor(255, 255, 255, 255)
+
+    if self.entity.type == 'boss' then
+        print('')
+    end
 end

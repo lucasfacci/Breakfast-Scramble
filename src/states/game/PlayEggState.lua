@@ -1,9 +1,9 @@
-PlayKitchenState = Class{__includes = BaseState}
+PlayEggState = Class{__includes = BaseState}
 
-function PlayKitchenState:init(params)
-    self.map = KitchenMap()
+function PlayEggState:init(params)
+    self.map = EggMap()
 
-    self.firstTimeInKitchenScene = maps_control['kitchen'].firstTimeInScene
+    self.firstTimeInScene = params.firstTimeInScene or false
     self.playerBlocked = false
 
     self.player = Player {
@@ -45,31 +45,34 @@ function PlayKitchenState:init(params)
         self.player:fire(self.projectiles)
     end)
 
-    if self.firstTimeInKitchenScene then
-        self.playerBlocked = true
-        Timer.after(3,
-            function()
-                gStateStack:push(DialogueState(' Mother: \n\n\n' ..
-                    ' Glad to see you awake sweaty. \n' ..
-                    ' Oh my, look at that messy hair! \n\n\n' ..
-                    ' Say, before you get dressed up for the day, we are all out of eggs. \n' ..
-                    ' Be a peach and go to Mr. X house/Mrs. Y stall and see if they have any. ',
-                    function()
-                        self.playerBlocked = false
-                        maps_control['kitchen'].firstTimeInScene = false
-                    end)
-                )
-            end
-        )
-    end
+    self:generateGameObjects()
 end
 
-function PlayKitchenState:update(dt)
-    Timer.update(dt)
+function PlayEggState:generateGameObjects()
+    local egg = GameObject(GAME_OBJECT_DEFS['egg'], VIRTUAL_WIDTH / 2 - GAME_OBJECT_DEFS['egg'].width / 2, self.map.groundLevel - GAME_OBJECT_DEFS['egg'].height - 10)
 
-    if love.keyboard.wasPressed('escape') then
-        love.event.quit()
+    egg.onCollide = function()
+        -- gStateStack:push(DialogueState(" Press 'E' get the egg ",
+        --     function()
+        --         gStateStack:pop()
+        --     end)
+        -- )
+        if love.keyboard.wasPressed('e') then
+            self.map.finish = true
+            table.remove(self.map.objects, 1)
+            self.player:changeState('fall')
+        end
     end
+    
+    table.insert(self.map.objects, egg)
+
+    local nest = GameObject(GAME_OBJECT_DEFS['nest'], VIRTUAL_WIDTH / 2 - GAME_OBJECT_DEFS['nest'].width / 2, self.map.groundLevel - GAME_OBJECT_DEFS['nest'].height + 10)
+    
+    table.insert(self.map.objects, nest)
+end
+
+function PlayEggState:update(dt)
+    Timer.update(dt)
 
     if self.playerBlocked == false then
         self.player:update(dt)
@@ -93,34 +96,24 @@ function PlayKitchenState:update(dt)
     
     if self.player.x <= 0 then
         self.player.x = 0
-
-        if love.keyboard.wasPressed('e') and not self.playerBlocked then
-            gStateStack:pop()
-            gStateStack:push(PlayBedroomState({x = MAP_WIDTH - self.player.width, y = self.map.groundLevel - self.player.height, firstTimeInKitchenScene = self.firstTimeInKitchenScene}))
-        end
     end
 
     if self.player.x >= self.map.width - self.player.width then
         self.player.x = self.map.width - self.player.width
-
-        if love.keyboard.wasPressed('e') then
-            gStateStack:pop()
-            gStateStack:push(LevelSelectorState({}))
-        end
     end
 end
 
-function PlayKitchenState:render()
+function PlayEggState:render()
     love.graphics.push()
     self.map:render()
     self.player:render()
 
-    for k, projectile in pairs(self.projectiles) do
-        projectile:render()
+    if self.map.finish == true then
+        love.graphics.draw(gTextures['egg'], gFrames['egg'][1], self.player.x, self.player.y - 210)
     end
 
-    for k, object in pairs(self.map.objects) do
-        object:render()
+    for k, projectile in pairs(self.projectiles) do
+        projectile:render()
     end
     love.graphics.pop()
 end

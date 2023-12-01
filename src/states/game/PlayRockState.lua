@@ -124,6 +124,11 @@ function PlayRockState:update(dt)
 
     if self.player.x >= self.map.width - self.player.width then
         self.player.x = self.map.width - self.player.width
+
+        if self.player.y <= -10400 - self.player.height and love.keyboard.wasPressed('e') then
+            gStateStack:pop()
+            gStateStack:push(PlayEggState({}))
+        end
     end
 end
 

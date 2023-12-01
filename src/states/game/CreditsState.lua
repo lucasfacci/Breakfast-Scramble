@@ -7,11 +7,16 @@ end
 function CreditsState:update(dt)
     if love.keyboard.wasPressed('return') then
         gStateStack:pop()
-        gStateStack:push(MenuState())
+        gStateStack:push(MenuState({}))
+    end
+
+    if love.keyboard.wasPressed('escape') then
+        love.event.quit()
     end
 end
 
 function CreditsState:render()
+    love.graphics.setFont(gFonts['yesevaone-medium'])
     love.graphics.setColor(255/255, 255/255, 255/255)
     love.graphics.printf('Credits to:', 0, 100, VIRTUAL_WIDTH, 'center')
 

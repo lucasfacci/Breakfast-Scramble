@@ -96,5 +96,47 @@ GAME_OBJECT_DEFS = {
                 frame = 1
             }
         }
+    },
+    ['egg'] = {
+        type = 'egg',
+        texture = 'egg',
+        frame = 1,
+        width = 244,
+        height = 288,
+        solid = false,
+        defaultState = 'stopped',
+        states = {
+            ['stopped'] = {
+                frame = 1
+            }
+        }
+    },
+    ['nest'] = {
+        type = 'nest',
+        texture = 'nest',
+        frame = 1,
+        width = 339,
+        height = 130,
+        solid = false,
+        defaultState = 'stopped',
+        states = {
+            ['stopped'] = {
+                frame = 1
+            }
+        }
+    },
+    ['little_character'] = {
+        type = 'little_character',
+        texture = 'little_character',
+        frame = 1,
+        width = 50,
+        height = 50,
+        solid = false,
+        defaultState = 'stopped',
+        states = {
+            ['stopped'] = {
+                frame = 1
+            }
+        }
     }
 }

@@ -77,6 +77,10 @@ ENTITY_DEFS = {
             ['sneak'] = {
                 frames = {1},
                 texture = 'character_sneak'
+            },
+            ['carry'] = {
+                frames = {1},
+                texture = 'character_carry'
             }
         }
     },
@@ -84,7 +88,7 @@ ENTITY_DEFS = {
         type = 'boss',
         walkSpeed = 900,
         jumpVelocity = -1850,
-        health = 3,
+        health = 30,
         width = 464,
         height = 529,
         animations = {
