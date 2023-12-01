@@ -51,8 +51,8 @@ function PlayBedroomState:init(params)
             function()
                 gStateStack:push(DialogueState(' Mother: \n\n\n' ..
                     ' Time to jump out of bed and get ready for the morning! \n' ..
-                    ' **Press Space to jump** \n\n\n' ..
-                    ' **Move with Arrows** ',
+                    ' **Move with Arrows** \n\n\n' ..
+                    " **Press 'Z' to jump** ",
                     function()
                         maps_control['bedroom'].firstTimeInScene = false
                         self.playerBlocked = false

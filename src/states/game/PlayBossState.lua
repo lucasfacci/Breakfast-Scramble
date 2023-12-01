@@ -87,6 +87,7 @@ function PlayBossState:update(dt)
     if self.playerBlocked == false then
         self.player:update(dt)
     end
+    self.boss:update(dt)
     self.map:update(dt)
 
     for k, object in pairs(self.map.objects) do

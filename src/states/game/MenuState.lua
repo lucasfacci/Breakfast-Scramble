@@ -57,17 +57,17 @@ function MenuState:render()
     -- menu options
     love.graphics.setFont(gFonts['yesevaone-medium'])
     love.graphics.setColor(192/255, 192/255, 192/255)
-    love.graphics.printf('Play', 0, VIRTUAL_HEIGHT / 2 - 100, VIRTUAL_WIDTH, 'center')
-    love.graphics.printf('Credits', 0, VIRTUAL_HEIGHT / 2, VIRTUAL_WIDTH, 'center')
-    love.graphics.printf('Exit', 0, VIRTUAL_HEIGHT / 2 + 100, VIRTUAL_WIDTH, 'center')
+    love.graphics.printf('Play', 0, VIRTUAL_HEIGHT / 2 - 50, VIRTUAL_WIDTH, 'center')
+    love.graphics.printf('Credits', 0, VIRTUAL_HEIGHT / 2 + 50, VIRTUAL_WIDTH, 'center')
+    love.graphics.printf('Exit', 0, VIRTUAL_HEIGHT / 2 + 150, VIRTUAL_WIDTH, 'center')
     if self.option == 1 or self.option == 0 then
         love.graphics.setColor(255/255, 255/255, 255/255)
-        love.graphics.printf('Play', 0, VIRTUAL_HEIGHT / 2 - 100, VIRTUAL_WIDTH, 'center')
+        love.graphics.printf('Play', 0, VIRTUAL_HEIGHT / 2 - 50, VIRTUAL_WIDTH, 'center')
     elseif self.option == 2 then
         love.graphics.setColor(255/255, 255/255, 255/255)
-        love.graphics.printf('Credits', 0, VIRTUAL_HEIGHT / 2, VIRTUAL_WIDTH, 'center')
+        love.graphics.printf('Credits', 0, VIRTUAL_HEIGHT / 2 + 50, VIRTUAL_WIDTH, 'center')
     elseif self.option == 3 then
         love.graphics.setColor(255/255, 255/255, 255/255)
-        love.graphics.printf('Exit', 0, VIRTUAL_HEIGHT / 2 + 100, VIRTUAL_WIDTH, 'center')
+        love.graphics.printf('Exit', 0, VIRTUAL_HEIGHT / 2 + 150, VIRTUAL_WIDTH, 'center')
     end
 end
