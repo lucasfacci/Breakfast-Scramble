@@ -79,5 +79,19 @@ ENTITY_DEFS = {
                 texture = 'character_sneak'
             }
         }
+    },
+    ['boss'] = {
+        type = 'boss',
+        walkSpeed = 900,
+        jumpVelocity = -1850,
+        health = 3,
+        width = 464,
+        height = 529,
+        animations = {
+            ['idle'] = {
+                frames = {1},
+                texture = 'boss_idle'
+            }
+        }
     }
 }

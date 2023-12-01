@@ -2,7 +2,7 @@ require 'src/Dependencies'
 
 function love.load()
     love.graphics.setDefaultFilter('nearest', 'nearest')
-    love.window.setTitle('our-game')
+    love.window.setTitle('Breakfast Scramble')
 
     push:setupScreen(VIRTUAL_WIDTH, VIRTUAL_HEIGHT, WINDOW_WIDTH, WINDOW_HEIGHT, {
         fullscreen = false,
@@ -12,7 +12,7 @@ function love.load()
     })
 
     gStateStack = StateStack()
-    gStateStack:push(MenuState())
+    gStateStack:push(MenuState({}))
 
     love.keyboard.keysPressed = {}
 end

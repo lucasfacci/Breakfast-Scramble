@@ -49,13 +49,24 @@ function PlayRockState:init()
 end
 
 function PlayRockState:generateRock()
-    local rock = GameObject(GAME_OBJECT_DEFS['rock'], math.random(self.map.width - GAME_OBJECT_DEFS['rock'].width), self.player.y - MAP_HEIGHT)
+    local choice = math.random(2)
+    if choice == 1 then
+        local rock = GameObject(GAME_OBJECT_DEFS['rock1'], math.random(self.map.width - GAME_OBJECT_DEFS['rock1'].width), self.player.y - MAP_HEIGHT)
 
-    rock.onCollide = function()
-        self.player:damage(1)
+        rock.onCollide = function()
+            self.player:damage(1)
+        end
+
+        table.insert(self.map.objects, rock)
+    elseif choice == 2 then
+        local rock = GameObject(GAME_OBJECT_DEFS['rock2'], math.random(self.map.width - GAME_OBJECT_DEFS['rock2'].width), self.player.y - MAP_HEIGHT)
+
+        rock.onCollide = function()
+            self.player:damage(1)
+        end
+
+        table.insert(self.map.objects, rock)
     end
-
-    table.insert(self.map.objects, rock)
 end
 
 function PlayRockState:randomizeRockFallTime(dt)
@@ -90,7 +101,7 @@ function PlayRockState:update(dt)
             object:onCollide()
         end
 
-        if object.type == 'rock' then
+        if object.type == 'rock1' or object.type == 'rock2' then
             if object.y < self.map.groundLevel then
                 object.y = object.y + 600 * dt
             else

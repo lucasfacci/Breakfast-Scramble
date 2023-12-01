@@ -3,7 +3,7 @@ PlayBedroomState = Class{__includes = BaseState}
 function PlayBedroomState:init(params)
     self.map = BedroomMap()
 
-    self.firstTimeInScene = params.firstTimeInScene or false
+    self.firstTimeInBedroomScene = maps_control['bedroom'].firstTimeInScene
     self.playerBlocked = false
 
     self.player = Player {
@@ -45,7 +45,7 @@ function PlayBedroomState:init(params)
         self.player:fire(self.projectiles)
     end)
     
-    if self.firstTimeInScene == true then
+    if self.firstTimeInBedroomScene == true then
         self.playerBlocked = true
         Timer.after(4,
             function()
@@ -54,6 +54,7 @@ function PlayBedroomState:init(params)
                     ' **Press Space to jump** \n\n\n' ..
                     ' **Move with Arrows** ',
                     function()
+                        maps_control['bedroom'].firstTimeInScene = false
                         self.playerBlocked = false
 
                         Timer.after(2, function() table.remove(self.map.objects, 3) end)

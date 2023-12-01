@@ -13,12 +13,26 @@ GAME_OBJECT_DEFS = {
             }
         }
     },
-    ['rock'] = {
-        type = 'rock',
-        texture = 'rock',
+    ['rock1'] = {
+        type = 'rock1',
+        texture = 'rock1',
         frame = 1,
         width = 200,
-        height = 200,
+        height = 196,
+        solid = false,
+        defaultState = 'stopped',
+        states = {
+            ['stopped'] = {
+                frame = 1
+            }
+        }
+    },
+    ['rock2'] = {
+        type = 'rock2',
+        texture = 'rock2',
+        frame = 1,
+        width = 200,
+        height = 130,
         solid = false,
         defaultState = 'stopped',
         states = {
@@ -32,7 +46,7 @@ GAME_OBJECT_DEFS = {
         texture = 'rock_platform',
         frame = 1,
         width = 250,
-        height = 80,
+        height = 92,
         solid = true,
         defaultState = 'stopped',
         states = {
@@ -45,8 +59,8 @@ GAME_OBJECT_DEFS = {
         type = 'door',
         texture = 'door',
         frame = 1,
-        width = 250,
-        height = 400,
+        width = 294,
+        height = 550,
         solid = false,
         defaultState = 'closed',
         states = {

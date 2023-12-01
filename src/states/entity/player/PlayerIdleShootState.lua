@@ -42,14 +42,17 @@ function PlayerIdleShootState:update(dt)
     end
 
     if love.keyboard.wasPressed('left') then
+        if self.entity.direction == 'right' then
+            self.entity.x = self.entity.x - 55
+        end
         self.entity.direction = 'left'
-        self.entity:changeState('idle-shoot')
+        -- self.entity:changeState('idle-shoot')
     elseif love.keyboard.wasPressed('right') then
         if self.entity.direction == 'left' then
             self.entity.x = self.entity.x + 55
         end
         self.entity.direction = 'right'
-        self.entity:changeState('idle-shoot')
+        -- self.entity:changeState('idle-shoot')
     end
 
     EntityIdleShootState.update(self, dt)

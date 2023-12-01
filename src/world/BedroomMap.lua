@@ -12,17 +12,24 @@ function BedroomMap:init()
     self.gravityOn = true
     self.gravityAmount = GRAVITY_AMOUNT
 
+    self.firstTimeInBedroomScene = maps_control['bedroom'].firstTimeInScene
+
     self.objects = {}
     self:generateGameObjects()
 end
 
 function BedroomMap:generateGameObjects()
-    local door = GameObject(GAME_OBJECT_DEFS['door'], VIRTUAL_WIDTH - 260, self.groundLevel - GAME_OBJECT_DEFS['door'].height - 10)
+    local door = GameObject(GAME_OBJECT_DEFS['door'], VIRTUAL_WIDTH - GAME_OBJECT_DEFS['door'].width - 20, self.groundLevel - GAME_OBJECT_DEFS['door'].height - 10)
 
     door.onCollide = function()
+        -- gStateStack:push(DialogueState(" Press 'E' to go through the door ",
+        --     function()
+        --         gStateStack:pop()
+        --     end)
+        -- )
         if love.keyboard.wasPressed('e') then
             gStateStack:pop()
-            gStateStack:push(PlayKitchenState({firstTimeInScene = true}))
+            gStateStack:push(PlayKitchenState())
         end
     end
     
@@ -31,9 +38,9 @@ function BedroomMap:generateGameObjects()
     local bed = GameObject(GAME_OBJECT_DEFS['bed'], 350, self.groundLevel - GAME_OBJECT_DEFS['bed'].height)
 
     bed.onCollide = function()
-        if love.keyboard.wasPressed('e') then
-            print('bed trigger')
-        end
+        -- if love.keyboard.wasPressed('e') then
+        --     print('bed trigger')
+        -- end
     end
 
     table.insert(self.objects, bed)
@@ -51,7 +58,9 @@ function BedroomMap:render()
 
     self.objects[1]:render()
 
-    if self.objects[3] then
-        self.objects[3]:render()
+    if self.firstTimeInBedroomScene == true then
+        if self.objects[3] then
+            self.objects[3]:render()
+        end
     end
 end

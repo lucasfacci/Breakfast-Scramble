@@ -1,9 +1,9 @@
-PlayKitchenState = Class{__includes = BaseState}
+PlayBossState = Class{__includes = BaseState}
 
-function PlayKitchenState:init(params)
-    self.map = KitchenMap()
+function PlayBossState:init(params)
+    self.map = BossMap()
 
-    self.firstTimeInKitchenScene = maps_control['kitchen'].firstTimeInScene
+    self.firstTimeInScene = params.firstTimeInScene or false
     self.playerBlocked = false
 
     self.player = Player {
@@ -23,6 +23,23 @@ function PlayKitchenState:init(params)
 
         map = self.map
     }
+    
+    self.boss = Entity {
+        type = ENTITY_DEFS['boss'].type,
+        direction = 'front',
+        walkSpeed = ENTITY_DEFS['boss'].walkSpeed,
+        jumpVelocity = ENTITY_DEFS['boss'].jumpVelocity,
+        animations = ENTITY_DEFS['boss'].animations,
+        health = ENTITY_DEFS['boss'].health,
+
+        x = self.map.width - ENTITY_DEFS['boss'].width,
+        y = self.map.groundLevel - ENTITY_DEFS['boss'].height,
+
+        width = ENTITY_DEFS['boss'].width,
+        height = ENTITY_DEFS['boss'].height,
+
+        map = self.map
+    }
 
     self.player.stateMachine = StateMachine {
         ['fall'] = function() return PlayerFallState(self.player, self.map) end,
@@ -36,7 +53,12 @@ function PlayKitchenState:init(params)
         ['walk-shoot'] = function() return PlayerWalkShootState(self.player, self.map) end
     }
 
+    self.boss.stateMachine = StateMachine {
+        ['idle'] = function() return BossIdleState(self.boss) end
+    }
+
     self.player:changeState('fall')
+    self.boss:changeState('idle')
 
     -- projectiles in the map/state
     self.projectiles = {}
@@ -45,26 +67,17 @@ function PlayKitchenState:init(params)
         self.player:fire(self.projectiles)
     end)
 
-    if self.firstTimeInKitchenScene then
+    if self.firstTimeInScene then
         self.playerBlocked = true
         Timer.after(3,
             function()
-                gStateStack:push(DialogueState(' Mother: \n\n\n' ..
-                    ' Glad to see you awake sweaty. \n' ..
-                    ' Oh my, look at that messy hair! \n\n\n' ..
-                    ' Say, before you get dressed up for the day, we are all out of eggs. \n' ..
-                    ' Be a peach and go to Mr. X house/Mrs. Y stall and see if they have any. ',
-                    function()
-                        self.playerBlocked = false
-                        maps_control['kitchen'].firstTimeInScene = false
-                    end)
-                )
+                self.playerBlocked = false
             end
         )
     end
 end
 
-function PlayKitchenState:update(dt)
+function PlayBossState:update(dt)
     Timer.update(dt)
 
     if love.keyboard.wasPressed('escape') then
@@ -94,9 +107,9 @@ function PlayKitchenState:update(dt)
     if self.player.x <= 0 then
         self.player.x = 0
 
-        if love.keyboard.wasPressed('e') and not self.playerBlocked then
+        if love.keyboard.wasPressed('e') then
             gStateStack:pop()
-            gStateStack:push(PlayBedroomState({x = MAP_WIDTH - self.player.width, y = self.map.groundLevel - self.player.height, firstTimeInKitchenScene = self.firstTimeInKitchenScene}))
+            gStateStack:push(PlayKitchenState({x = MAP_WIDTH - self.player.width, y = self.map.groundLevel - self.player.height}))
         end
     end
 
@@ -105,22 +118,45 @@ function PlayKitchenState:update(dt)
 
         if love.keyboard.wasPressed('e') then
             gStateStack:pop()
-            gStateStack:push(PlayBossState({}))
+            gStateStack:push(PlayRockState())
         end
     end
 end
 
-function PlayKitchenState:render()
+function PlayBossState:render()
     love.graphics.push()
     self.map:render()
     self.player:render()
+    self.boss:render()
 
     for k, projectile in pairs(self.projectiles) do
         projectile:render()
     end
-
-    for k, object in pairs(self.map.objects) do
-        object:render()
-    end
     love.graphics.pop()
+
+    -- love.graphics.setColor(255/255, 255/255, 255/255)
+    -- player's life
+    if not self.player.dead and self.player.health >= 1 then
+        if self.player.health == 3 then
+            love.graphics.draw(gTextures['hearth'], gFrames['hearth'][1], 10, 10)
+            love.graphics.draw(gTextures['hearth'], gFrames['hearth'][1], 70, 10)
+            love.graphics.draw(gTextures['hearth'], gFrames['hearth'][1], 130, 10)
+        elseif self.player.health == 2 then
+            love.graphics.draw(gTextures['hearth'], gFrames['hearth'][1], 10, 10)
+            love.graphics.draw(gTextures['hearth'], gFrames['hearth'][1], 70, 10)
+            love.graphics.setColor(255/255, 255/255, 255/255, 0.3)
+            love.graphics.draw(gTextures['hearth'], gFrames['hearth'][1], 130, 10)
+        elseif self.player.health == 1 then
+            love.graphics.draw(gTextures['hearth'], gFrames['hearth'][1], 10, 10)
+            love.graphics.setColor(255/255, 255/255, 255/255, 0.3)
+            love.graphics.draw(gTextures['hearth'], gFrames['hearth'][1], 70, 10)
+            love.graphics.draw(gTextures['hearth'], gFrames['hearth'][1], 130, 10)
+        end
+    end
+
+    love.graphics.setColor(255/255, 255/255, 255/255)
+    -- boss's life
+    love.graphics.draw(gTextures['hearth'], gFrames['hearth'][1], VIRTUAL_WIDTH - 80, 10)
+    love.graphics.draw(gTextures['hearth'], gFrames['hearth'][1], VIRTUAL_WIDTH - 140, 10)
+    love.graphics.draw(gTextures['hearth'], gFrames['hearth'][1], VIRTUAL_WIDTH - 200, 10)
 end
